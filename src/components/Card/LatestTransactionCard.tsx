@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import moment from "@/constants/moment";
 import { formatEther } from "viem";
 import { getChain } from "@/constants/web3";
+import { HexHighlightBadge } from "../Badge/HexHighlightBadge";
 
 export const LatestTransactionCard = (tx: ILatestTransaction) => {
   const calculateSince = () => moment(tx.block_timestamp * 1000).fromNow();
@@ -42,8 +43,14 @@ export const LatestTransactionCard = (tx: ILatestTransaction) => {
             </Badge>
           </HStack>
           <Text>
-            From {formatAddress(tx.from_address)} To{" "}
-            {formatAddress(tx.to_address)}
+            From{" "}
+            <HexHighlightBadge>
+              {formatAddress(tx.from_address)}
+            </HexHighlightBadge>{" "}
+            To{" "}
+            <HexHighlightBadge>
+              {formatAddress(tx.to_address)}
+            </HexHighlightBadge>
           </Text>
           <HStack>
             <Text as="i">Since {since}</Text>
