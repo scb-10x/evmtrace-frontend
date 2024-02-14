@@ -1,15 +1,6 @@
 import { ILatestTransaction } from "@/interfaces/transaction";
-import {
-  Badge,
-  Card,
-  Circle,
-  HStack,
-  Icon,
-  Stack,
-  Text,
-} from "@chakra-ui/react";
+import { Badge, Card, Circle, HStack, Stack, Text } from "@chakra-ui/react";
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
 import { formatEther } from "viem";
 import { getChain } from "@/constants/web3";
 import { HexHighlightBadge } from "../Badge/HexHighlightBadge";
@@ -88,6 +79,7 @@ export const LatestTransactionCard = ({
             )}
             <HStack>
               <Text as="i" color="gray.200">
+                Block <HexHighlightBadge>{tx.block_number}</HexHighlightBadge>{" "}
                 Since {since}
               </Text>
               <Badge>

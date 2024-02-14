@@ -42,7 +42,9 @@ export const LatestBlockCard = ({
             <HStack>
               <HexHighlightBadge>{block.number}</HexHighlightBadge>
               <Badge>{block.transaction_count} Txs</Badge>
-              <Badge>{block.related_transaction_count} Related Txs</Badge>
+              <Badge colorScheme="pink">
+                {block.related_transaction_count} Related Txs
+              </Badge>
             </HStack>
             <Text>
               Hash <HexHighlightBadge>{block.hash}</HexHighlightBadge>

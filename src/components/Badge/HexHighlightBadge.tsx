@@ -1,7 +1,6 @@
 import { formatAddress } from "@/utils/address";
 import { formatHex } from "@/utils/string";
 import {
-  Icon,
   Popover,
   PopoverContent,
   PopoverTrigger,
@@ -9,10 +8,8 @@ import {
   Text,
   TextProps,
   chakra,
-  useToast,
 } from "@chakra-ui/react";
-import { LuCopy } from "react-icons/lu";
-import { Address, Hex } from "viem";
+import Link from "next/link";
 import { create } from "zustand";
 
 const useHighlight = create<{
@@ -25,11 +22,16 @@ const useHighlight = create<{
   clearHighlight: () => set({ highlight: null }),
 }));
 
-export const HexHighlightBadge = ({ children, ...props }: TextProps) => {
+export const HexHighlightBadge = ({
+  href,
+  children,
+  ...props
+}: TextProps & { href?: string }) => {
   const { highlight, setHighlight, clearHighlight } = useHighlight();
-  const toast = useToast();
 
   const isHighlighted = children?.toString() === highlight;
+  const isExpanded =
+    children?.toString().startsWith("0x") && children?.toString().length > 12;
 
   return (
     <Popover
@@ -40,6 +42,7 @@ export const HexHighlightBadge = ({ children, ...props }: TextProps) => {
       computePositionOnMount={false}
       autoFocus={false}
       eventListeners={false}
+      isOpen={isExpanded ? undefined : false}
     >
       <PopoverTrigger>
         <chakra.span
@@ -49,12 +52,14 @@ export const HexHighlightBadge = ({ children, ...props }: TextProps) => {
           }
           onMouseLeave={clearHighlight}
           color={isHighlighted ? "yellow.300" : "inherit"}
-          cursor={isHighlighted ? "pointer" : "default"}
+          cursor={isHighlighted && href ? "pointer" : "default"}
           border="1px dashed"
           borderColor={isHighlighted ? "yellow.300" : "transparent"}
           borderRadius="md"
           w="fit-content"
           {...props}
+          as={href ? Link : undefined}
+          href={href}
         >
           {typeof children === "string"
             ? !children.startsWith("0x") || children.length < 12

@@ -31,6 +31,10 @@ export const LatestTransactionPage = () => {
           return <Image src={chain?.icon} boxSize={4} />;
         },
       }),
+      columnHelper.accessor("block_number", {
+        header: "Block",
+        cell: (row) => <HexHighlightBadge>{row.getValue()}</HexHighlightBadge>,
+      }),
       columnHelper.accessor((r) => [r.transaction_hash, r.error] as const, {
         header: "Hash",
         cell: (row) => {

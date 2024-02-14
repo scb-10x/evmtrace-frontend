@@ -33,6 +33,7 @@ export const LatestBlocksPage = () => {
       }),
       columnHelper.accessor("number", {
         header: "Number",
+        cell: (row) => <HexHighlightBadge>{row.getValue()}</HexHighlightBadge>,
       }),
       columnHelper.accessor("hash", {
         header: "Hash",
