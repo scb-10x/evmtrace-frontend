@@ -35,7 +35,7 @@ export const useLatest = ({
       blockSse?.close();
       txsSse?.close();
     };
-  }, [initialBlocks, initialTxs]);
+  }, []);
 
   return { txs, blocks };
 };
