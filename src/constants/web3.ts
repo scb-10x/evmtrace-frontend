@@ -23,8 +23,8 @@ export const chains = [
   { ...scroll, icon: "/icons/scroll.svg" },
 ];
 
-export const getChain = (chainId: number) => {
-  return chains.find((chain) => chain.id === chainId);
+export const getChain = (chainId?: number) => {
+  return chainId ? chains.find((chain) => chain.id === chainId) : undefined;
 };
 
 const { publicClient } = configureChains(chains, [

@@ -1,9 +1,7 @@
 import { Address, Hex } from "viem";
 
-export interface ILatestTransaction {
+export interface ITransaction {
   chain_id: number;
-  block_number: number;
-  block_timestamp: number;
   transaction_hash: Hex;
   transaction_index: number;
   from_address: Address;
@@ -15,3 +13,13 @@ export interface ILatestTransaction {
   function_signature: string;
   function_name?: string;
 }
+
+export type IBlockTransaction = ITransaction & {
+  gas_used_total: number;
+  gas_used_first_degree: number;
+};
+
+export type ILatestTransaction = ITransaction & {
+  block_number: number;
+  block_timestamp: number;
+};

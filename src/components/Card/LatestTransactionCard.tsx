@@ -79,7 +79,12 @@ export const LatestTransactionCard = ({
             )}
             <HStack>
               <Text as="i" color="gray.200">
-                Block <HexHighlightBadge>{tx.block_number}</HexHighlightBadge>{" "}
+                Block{" "}
+                <HexHighlightBadge
+                  href={`/block?chainId=${tx.chain_id}&number=${tx.block_number}`}
+                >
+                  {tx.block_number}
+                </HexHighlightBadge>{" "}
                 Since {since}
               </Text>
               <Badge>

@@ -3,8 +3,7 @@ import { getChain } from "@/constants/web3";
 import { useLatest } from "@/hooks/useLatest";
 import { useSince } from "@/hooks/useSince";
 import { ILatestBlock } from "@/interfaces/block";
-import { formatHex } from "@/utils/string";
-import { Box, HStack, Heading, Image, Stack, Text } from "@chakra-ui/react";
+import { Box, Heading, Image, Stack, Text } from "@chakra-ui/react";
 import {
   createColumnHelper,
   getCoreRowModel,
@@ -31,9 +30,18 @@ export const LatestBlocksPage = () => {
           return <Image src={chain?.icon} boxSize={4} />;
         },
       }),
-      columnHelper.accessor("number", {
+      columnHelper.accessor((r) => [r.chain_id, r.number] as const, {
         header: "Number",
-        cell: (row) => <HexHighlightBadge>{row.getValue()}</HexHighlightBadge>,
+        cell: (row) => {
+          const [chainId, number] = row.getValue();
+          return (
+            <HexHighlightBadge
+              href={`/block?chainId=${chainId}&number=${number}`}
+            >
+              {row.getValue()}
+            </HexHighlightBadge>
+          );
+        },
       }),
       columnHelper.accessor("hash", {
         header: "Hash",

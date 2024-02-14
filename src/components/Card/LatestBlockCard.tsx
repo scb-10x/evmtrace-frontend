@@ -40,7 +40,11 @@ export const LatestBlockCard = ({
           </Circle>
           <Stack spacing={0}>
             <HStack>
-              <HexHighlightBadge>{block.number}</HexHighlightBadge>
+              <HexHighlightBadge
+                href={`/block?chainId=${block.chain_id}&number=${block.number}`}
+              >
+                {block.number}
+              </HexHighlightBadge>
               <Badge>{block.transaction_count} Txs</Badge>
               <Badge colorScheme="pink">
                 {block.related_transaction_count} Related Txs

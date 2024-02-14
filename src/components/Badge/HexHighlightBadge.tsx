@@ -51,13 +51,15 @@ export const HexHighlightBadge = ({
             children ? () => setHighlight(children.toString()) : undefined
           }
           onMouseLeave={clearHighlight}
-          color={isHighlighted ? "yellow.300" : "inherit"}
-          cursor={isHighlighted && href ? "pointer" : "default"}
           border="1px dashed"
-          borderColor={isHighlighted ? "yellow.300" : "transparent"}
           borderRadius="md"
           w="fit-content"
           {...props}
+          color={isHighlighted ? "yellow.300" : props.color || "inherit"}
+          cursor={isHighlighted && href ? "pointer" : props.cursor || "default"}
+          borderColor={
+            isHighlighted ? "yellow.300" : props.borderColor || "transparent"
+          }
           as={href ? Link : undefined}
           href={href}
         >
