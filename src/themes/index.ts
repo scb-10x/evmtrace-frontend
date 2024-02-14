@@ -4,6 +4,7 @@ import { buttonTheme } from "./Button";
 import { tooltipTheme } from "./Tooltip";
 import { skeletonTheme } from "./Skeleton";
 import { codeTheme } from "./Code";
+import { badgeTheme } from "./Badge";
 
 const breakpoints = {
   base: "0em",
@@ -110,6 +111,7 @@ const theme = extendTheme({
     Button: buttonTheme,
     Skeleton: skeletonTheme,
     Code: codeTheme,
+    Badge: badgeTheme,
   },
 
   fonts: {

@@ -1,6 +1,4 @@
 import { ILatestTransaction } from "@/interfaces/transaction";
-import { formatAddress } from "@/utils/address";
-import { formatHex } from "@/utils/string";
 import {
   Badge,
   Card,
@@ -12,11 +10,9 @@ import {
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import moment from "@/constants/moment";
 import { formatEther } from "viem";
 import { getChain } from "@/constants/web3";
 import { HexHighlightBadge } from "../Badge/HexHighlightBadge";
-import { LuArrowRight, LuMoveRight } from "react-icons/lu";
 import { ChainIcon } from "../Icon/ChainIcon";
 import { useSince } from "@/hooks/useSince";
 
@@ -52,24 +48,27 @@ export const LatestTransactionCard = ({
           </Circle>
           <Stack spacing={0}>
             <HStack>
-              <HexHighlightBadge>{tx.transaction_hash}</HexHighlightBadge>
-              <Badge fontSize="sm" colorScheme={tx.error ? "red" : "green"}>
+              <HexHighlightBadge as="b">
+                {tx.transaction_hash}
+              </HexHighlightBadge>
+              <Badge colorScheme={tx.error ? "red" : "green"}>
                 {tx.error ?? "Success"}
               </Badge>
               {tx.ec_pairing_count > 0 && (
-                <Badge fontSize="sm" colorScheme="orange">
-                  ZK
-                </Badge>
+                <Badge colorScheme="orange">ZK</Badge>
               )}
               {tx.ec_recover_addresses.length > 0 && (
-                <Badge fontSize="sm" colorScheme="cyan">
-                  AA
-                </Badge>
+                <Badge colorScheme="cyan">AA</Badge>
               )}
             </HStack>
             <HStack>
+              <Badge colorScheme="yellow" variant="outline">
+                From
+              </Badge>
               <HexHighlightBadge>{tx.from_address}</HexHighlightBadge>
-              <Icon as={LuMoveRight} />
+              <Badge colorScheme="blue" variant="outline">
+                To
+              </Badge>
               <HexHighlightBadge>{tx.to_address}</HexHighlightBadge>
             </HStack>
             {tx.ec_recover_addresses.length > 0 && (
@@ -81,15 +80,17 @@ export const LatestTransactionCard = ({
                   </HexHighlightBadge>
                 </Text>
                 {tx.ec_recover_addresses.length > 1 && (
-                  <Badge fontSize="sm" colorScheme="cyan">
+                  <Badge colorScheme="cyan">
                     +{tx.ec_recover_addresses.length - 1}
                   </Badge>
                 )}
               </HStack>
             )}
             <HStack>
-              <Text as="i">Since {since}</Text>
-              <Badge fontSize="sm">
+              <Text as="i" color="gray.200">
+                Since {since}
+              </Text>
+              <Badge>
                 {formatEther(tx.value)}{" "}
                 {getChain(tx.chain_id)?.nativeCurrency.symbol}
               </Badge>

@@ -23,7 +23,7 @@ export const LatestStackCustomScroll = (props: StackProps) => {
         position: "absolute",
         left: 0,
         right: 0,
-        bottom: 0,
+        bottom: -1,
         height: "30%",
         background: "blackAlpha.300",
         backdropFilter: "blur(20px)",

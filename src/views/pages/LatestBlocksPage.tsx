@@ -28,12 +28,7 @@ export const LatestBlocksPage = () => {
         cell: (row) => {
           const chainId = row.getValue();
           const chain = getChain(chainId);
-          return (
-            <HStack>
-              <Image src={chain?.icon} boxSize={4} />
-              <Text>{chain?.name}</Text>
-            </HStack>
-          );
+          return <Image src={chain?.icon} boxSize={4} />;
         },
       }),
       columnHelper.accessor("number", {

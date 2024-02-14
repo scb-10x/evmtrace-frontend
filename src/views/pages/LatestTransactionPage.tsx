@@ -2,15 +2,7 @@ import { AppHeader, Section } from "@/components/common";
 import { getChain } from "@/constants/web3";
 import { useLatest } from "@/hooks/useLatest";
 import { ILatestTransaction } from "@/interfaces/transaction";
-import {
-  Badge,
-  HStack,
-  Heading,
-  Icon,
-  Image,
-  Stack,
-  Text,
-} from "@chakra-ui/react";
+import { Badge, HStack, Heading, Image, Stack, Text } from "@chakra-ui/react";
 import {
   createColumnHelper,
   getCoreRowModel,
@@ -20,7 +12,6 @@ import { useMemo } from "react";
 import { AnimatedTable } from "../layouts/AnimatedTable";
 import { formatHex } from "@/utils/string";
 import { HexHighlightBadge } from "@/components/Badge/HexHighlightBadge";
-import { LuMoveRight } from "react-icons/lu";
 import { formatEther } from "viem";
 import { useSince } from "@/hooks/useSince";
 import numbro from "numbro";
@@ -38,31 +29,72 @@ export const LatestTransactionPage = () => {
         cell: (row) => {
           const chainId = row.getValue();
           const chain = getChain(chainId);
-          return (
-            <HStack>
-              <Image src={chain?.icon} boxSize={4} />
-              <Text>{chain?.name}</Text>
-            </HStack>
-          );
+          return <Image src={chain?.icon} boxSize={4} />;
         },
       }),
-      columnHelper.accessor("transaction_hash", {
+      columnHelper.accessor((r) => [r.transaction_hash, r.error] as const, {
         header: "Hash",
-        cell: (row) => <HexHighlightBadge>{row.getValue()}</HexHighlightBadge>,
+        cell: (row) => {
+          const [hash, error] = row.getValue();
+          return (
+            <Stack spacing={0} w="fit-content">
+              <Badge colorScheme={error ? "red" : "green"}>
+                {error || "Success"}
+              </Badge>
+              <HexHighlightBadge>{hash}</HexHighlightBadge>
+            </Stack>
+          );
+        },
       }),
       columnHelper.accessor((r) => [r.from_address, r.to_address] as const, {
         header: "From / To",
         cell: (row) => {
           const [from, to] = row.getValue();
           return (
-            <HStack>
-              <HexHighlightBadge>{formatHex(from)}</HexHighlightBadge>
-              <Icon as={LuMoveRight} />
-              <HexHighlightBadge>{formatHex(to)}</HexHighlightBadge>
-            </HStack>
+            <Stack align="end" spacing={0} w="fit-content">
+              <HStack>
+                <Badge colorScheme="yellow" variant="outline">
+                  From
+                </Badge>
+                <HexHighlightBadge>{formatHex(from)}</HexHighlightBadge>
+              </HStack>
+              <HStack>
+                <Badge colorScheme="blue" variant="outline">
+                  To
+                </Badge>
+                <HexHighlightBadge>{formatHex(to)}</HexHighlightBadge>
+              </HStack>
+            </Stack>
           );
         },
       }),
+      columnHelper.accessor(
+        (r) => [r.ec_pairing_count, r.ec_recover_addresses] as const,
+        {
+          header: "Type",
+          cell: (row) => {
+            const [pairingCount, addresses] = row.getValue();
+            return (
+              <Stack spacing={1}>
+                <HStack>
+                  {pairingCount > 0 && <Badge colorScheme="orange">ZK</Badge>}
+                  {addresses.length > 0 && <Badge colorScheme="cyan">AA</Badge>}
+                </HStack>
+                {addresses.length > 0 && (
+                  <HStack>
+                    <HexHighlightBadge color="cyan.300">
+                      {addresses[0]}
+                    </HexHighlightBadge>
+                    {addresses.length > 1 && (
+                      <Badge colorScheme="cyan">+{addresses.length - 1}</Badge>
+                    )}
+                  </HStack>
+                )}
+              </Stack>
+            );
+          },
+        }
+      ),
       columnHelper.accessor((r) => [r.chain_id, r.value] as const, {
         header: "Value",
         cell: (row) => {
@@ -77,54 +109,6 @@ export const LatestTransactionPage = () => {
               })}{" "}
               {chain?.nativeCurrency.symbol}
             </Text>
-          );
-        },
-      }),
-      columnHelper.accessor(
-        (r) => [r.ec_pairing_count, r.ec_recover_addresses] as const,
-        {
-          header: "Type",
-          cell: (row) => {
-            const [pairingCount, recoverAddresses] = row.getValue();
-            return (
-              <HStack
-                fontSize="sm"
-                sx={{
-                  "& > *": {
-                    fontSize: "inherit",
-                  },
-                }}
-              >
-                {pairingCount > 0 && <Badge colorScheme="orange">ZK</Badge>}
-                {recoverAddresses.length > 0 && (
-                  <Badge colorScheme="cyan">AA</Badge>
-                )}
-              </HStack>
-            );
-          },
-        }
-      ),
-      columnHelper.accessor("ec_recover_addresses", {
-        header: "Related",
-        cell: (row) => {
-          const addresses = row.getValue();
-          return (
-            <HStack>
-              {addresses.length > 0 ? (
-                <>
-                  <HexHighlightBadge color="cyan.300">
-                    {addresses[0]}
-                  </HexHighlightBadge>
-                  {addresses.length > 1 && (
-                    <Badge fontSize="sm" colorScheme="cyan">
-                      +{addresses.length - 1}
-                    </Badge>
-                  )}
-                </>
-              ) : (
-                <Badge fontSize="sm">None</Badge>
-              )}
-            </HStack>
           );
         },
       }),
