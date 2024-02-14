@@ -12,4 +12,6 @@ export interface ILatestTransaction {
   error?: string;
   ec_pairing_count: number;
   ec_recover_addresses: Address[];
+  function_signature: string;
+  function_name?: string;
 }

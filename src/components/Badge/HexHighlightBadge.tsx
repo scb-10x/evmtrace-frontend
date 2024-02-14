@@ -57,7 +57,7 @@ export const HexHighlightBadge = ({ children, ...props }: TextProps) => {
           {...props}
         >
           {typeof children === "string"
-            ? !children.startsWith("0x")
+            ? !children.startsWith("0x") || children.length < 12
               ? children
               : children.length > 44
               ? formatHex(children)

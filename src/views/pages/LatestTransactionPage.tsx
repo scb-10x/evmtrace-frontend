@@ -94,6 +94,29 @@ export const LatestTransactionPage = () => {
           },
         }
       ),
+      columnHelper.accessor(
+        (r) => [r.function_signature, r.function_name] as const,
+        {
+          header: "Function",
+          cell: (row) => {
+            const [signature, name] = row.getValue();
+            const sterilizedName = name?.split("(")?.[0];
+            return (
+              <Text
+                w="6rem"
+                textOverflow="ellipsis"
+                whiteSpace="nowrap"
+                display="inline-block"
+                overflow="hidden"
+              >
+                <HexHighlightBadge>
+                  {sterilizedName || signature}
+                </HexHighlightBadge>
+              </Text>
+            );
+          },
+        }
+      ),
       columnHelper.accessor((r) => [r.chain_id, r.value] as const, {
         header: "Value",
         cell: (row) => {
