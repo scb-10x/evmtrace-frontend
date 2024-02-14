@@ -62,7 +62,7 @@ export const HomePage = ({
             <Heading size="md">Latest Blocks</Heading>
             <LatestStackCustomScroll>
               <AnimatePresence>
-                {blocks.map((block, i) => (
+                {blocks.slice(0, 7).map((block, i) => (
                   <LatestBlockCard key={block.hash} index={i} {...block} />
                 ))}
               </AnimatePresence>
@@ -73,7 +73,7 @@ export const HomePage = ({
             <Heading size="md">Latest Transactions</Heading>
             <LatestStackCustomScroll>
               <AnimatePresence>
-                {txs.map((tx, i) => (
+                {txs.slice(0, 7).map((tx, i) => (
                   <LatestTransactionCard
                     key={tx.transaction_hash}
                     index={i}

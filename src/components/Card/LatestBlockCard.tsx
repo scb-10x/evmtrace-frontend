@@ -27,7 +27,6 @@ export const LatestBlockCard = ({
       key={block.hash}
       initial={{ x: -200, opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
-      exit={{ opacity: 0 }}
       transition={{
         type: "spring",
         delay: index * 0.02,
