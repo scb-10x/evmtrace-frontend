@@ -10,9 +10,6 @@ import {
 import { Section, AppHeader } from "@/components/common";
 import _ from "lodash";
 import { DESCRIPTION, TITLE } from "@/constants/texts";
-import { getLatestBlocks, getLatestTxs } from "@/services/latest";
-import { ILatestTransaction } from "@/interfaces/transaction";
-import { ILatestBlock } from "@/interfaces/block";
 import { AnimatePresence } from "framer-motion";
 import { LatestBlockCard } from "@/components/Card/LatestBlockCard";
 import { LatestTransactionCard } from "@/components/Card/LatestTransactionCard";
@@ -22,26 +19,15 @@ import { useLatest } from "@/hooks/useLatest";
 import Link from "next/link";
 
 export async function getServerSideProps() {
-  const [txs, blocks] = await Promise.all([getLatestTxs(), getLatestBlocks()]);
-
   return {
-    props: {
-      txs,
-      blocks,
-    },
+    props: {},
   };
 }
 
-export const HomePage = ({
-  txs: initialTxs,
-  blocks: initialBlocks,
-}: {
-  txs: ILatestTransaction[];
-  blocks: ILatestBlock[];
-}) => {
+export const HomePage = () => {
   const { txs, blocks } = useLatest({
-    initialBlocks,
-    initialTxs,
+    initialBlocks: [],
+    initialTxs: [],
   });
 
   return (

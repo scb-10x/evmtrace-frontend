@@ -29,7 +29,7 @@ export const HexHighlightBadge = ({ children, ...props }: TextProps) => {
   const { highlight, setHighlight, clearHighlight } = useHighlight();
   const toast = useToast();
 
-  const isHighlighted = typeof children === "string" && children === highlight;
+  const isHighlighted = children?.toString() === highlight;
 
   return (
     <Popover
@@ -45,9 +45,7 @@ export const HexHighlightBadge = ({ children, ...props }: TextProps) => {
         <chakra.span
           transition="0.2s ease-in-out all"
           onMouseEnter={
-            typeof children === "string"
-              ? () => setHighlight(children)
-              : undefined
+            children ? () => setHighlight(children.toString()) : undefined
           }
           onMouseLeave={clearHighlight}
           color={isHighlighted ? "yellow.300" : "inherit"}
@@ -55,10 +53,13 @@ export const HexHighlightBadge = ({ children, ...props }: TextProps) => {
           border="1px dashed"
           borderColor={isHighlighted ? "yellow.300" : "transparent"}
           borderRadius="md"
+          w="fit-content"
           {...props}
         >
           {typeof children === "string"
-            ? children.length > 44
+            ? !children.startsWith("0x")
+              ? children
+              : children.length > 44
               ? formatHex(children)
               : formatAddress(children)
             : children}

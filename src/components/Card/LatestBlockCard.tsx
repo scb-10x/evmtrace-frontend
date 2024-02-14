@@ -1,6 +1,6 @@
 import { ILatestBlock } from "@/interfaces/block";
 import { formatHex } from "@/utils/string";
-import { Card, Circle, HStack, Stack, Text } from "@chakra-ui/react";
+import { Badge, Card, Circle, HStack, Stack, Text } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import moment from "@/constants/moment";
@@ -39,15 +39,17 @@ export const LatestBlockCard = ({
             />
           </Circle>
           <Stack spacing={0}>
-            <Text>{block.number}</Text>
+            <HStack>
+              <HexHighlightBadge>{block.number}</HexHighlightBadge>
+              <Badge>{block.transaction_count} Txs</Badge>
+              <Badge>{block.related_transaction_count} Related Txs</Badge>
+            </HStack>
             <Text>
               Hash <HexHighlightBadge>{block.hash}</HexHighlightBadge>
             </Text>
-            <Text>
-              {block.transaction_count} txs | {block.related_transaction_count}{" "}
-              related txs
+            <Text as="i" color="gray.200">
+              Since {since}
             </Text>
-            <Text as="i">Since {since}</Text>
           </Stack>
         </HStack>
       </Card>
