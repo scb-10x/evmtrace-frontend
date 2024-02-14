@@ -10,7 +10,6 @@ import {
 } from "@tanstack/react-table";
 import { useMemo } from "react";
 import { AnimatedTable } from "../layouts/AnimatedTable";
-import { formatHex } from "@/utils/string";
 import { HexHighlightBadge } from "@/components/Badge/HexHighlightBadge";
 import { formatEther } from "viem";
 import { useSince } from "@/hooks/useSince";
@@ -56,13 +55,13 @@ export const LatestTransactionPage = () => {
                 <Badge colorScheme="yellow" variant="outline">
                   From
                 </Badge>
-                <HexHighlightBadge>{formatHex(from)}</HexHighlightBadge>
+                <HexHighlightBadge>{from}</HexHighlightBadge>
               </HStack>
               <HStack>
                 <Badge colorScheme="blue" variant="outline">
                   To
                 </Badge>
-                <HexHighlightBadge>{formatHex(to)}</HexHighlightBadge>
+                <HexHighlightBadge>{to}</HexHighlightBadge>
               </HStack>
             </Stack>
           );
