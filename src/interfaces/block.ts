@@ -7,4 +7,6 @@ export interface ILatestBlock {
   hash: Hex;
   transaction_count: number;
   related_transaction_count: number;
+  gas_limit: number;
+  gas_used: number;
 }

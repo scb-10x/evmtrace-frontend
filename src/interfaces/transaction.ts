@@ -10,4 +10,6 @@ export interface ILatestTransaction {
   to_address: Address;
   value: bigint;
   error?: string;
+  ec_pairing_count: number;
+  ec_recover_addresses: Address[];
 }

@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import { LatestBlockCard } from "@/components/Card/LatestBlockCard";
 import { LatestTransactionCard } from "@/components/Card/LatestTransactionCard";
+import { LatestStackCustomScroll } from "@/components/HomePage/LatestStackCustomScroll";
 
 export async function getServerSideProps() {
   const [txs, blocks] = await Promise.all([getLatestTxs(), getLatestBlocks()]);
@@ -58,57 +59,35 @@ export const HomePage = ({
       <AppHeader title="Home" />
       <Section>
         <Navbar />
-        <Stack>
-          <Heading>{TITLE}</Heading>
-          <Text>{DESCRIPTION}</Text>
+        <Stack spacing={4}>
+          <Stack align="center">
+            <Heading>{TITLE}</Heading>
+            <Text>{DESCRIPTION}</Text>
+          </Stack>
           <SimpleGrid columns={[1, null, 2]} spacing={2}>
             <Stack>
               <Heading size="md">Latest Blocks</Heading>
-              <Stack
-                maxH="lg"
-                overflowY="auto"
-                sx={{
-                  "::-webkit-scrollbar": {
-                    WebkitAppearance: "none",
-                    width: "4px",
-                    bg: "transparent",
-                  },
-                  "::-webkit-scrollbar-thumb": {
-                    borderRadius: "4px",
-                    bg: "gray",
-                  },
-                }}
-              >
+              <LatestStackCustomScroll>
                 <AnimatePresence>
-                  {blocks.map((block) => (
-                    <LatestBlockCard key={block.hash} {...block} />
+                  {blocks.map((block, i) => (
+                    <LatestBlockCard key={block.hash} index={i} {...block} />
                   ))}
                 </AnimatePresence>
-              </Stack>
+              </LatestStackCustomScroll>
             </Stack>
             <Stack>
               <Heading size="md">Latest Transactions</Heading>
-              <Stack
-                maxH="lg"
-                overflowY="auto"
-                sx={{
-                  "::-webkit-scrollbar": {
-                    WebkitAppearance: "none",
-                    width: "4px",
-                    bg: "transparent",
-                  },
-                  "::-webkit-scrollbar-thumb": {
-                    borderRadius: "full",
-                    bg: "gray",
-                  },
-                }}
-              >
+              <LatestStackCustomScroll>
                 <AnimatePresence>
-                  {txs.map((tx) => (
-                    <LatestTransactionCard key={tx.transaction_hash} {...tx} />
+                  {txs.map((tx, i) => (
+                    <LatestTransactionCard
+                      key={tx.transaction_hash}
+                      index={i}
+                      {...tx}
+                    />
                   ))}
                 </AnimatePresence>
-              </Stack>
+              </LatestStackCustomScroll>
             </Stack>
           </SimpleGrid>
         </Stack>
