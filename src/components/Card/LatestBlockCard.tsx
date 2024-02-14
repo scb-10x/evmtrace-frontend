@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import moment from "@/constants/moment";
 import { HexHighlightBadge } from "../Badge/HexHighlightBadge";
+import { ChainIcon } from "../Icon/ChainIcon";
 
 export const LatestBlockCard = ({
   index,
@@ -35,8 +36,16 @@ export const LatestBlockCard = ({
     >
       <Card p={2}>
         <HStack>
-          <Circle bg="chakra-body-bg" size={12}>
-            {block.chain_id}
+          <Circle bg="chakra-body-bg" size={12} pos="relative">
+            Bk
+            <ChainIcon
+              chainId={block.chain_id}
+              boxSize={6}
+              pos="absolute"
+              right={2}
+              bottom={2}
+              transform="translate(50%, 50%)"
+            />
           </Circle>
           <Stack spacing={0}>
             <Text>{block.number}</Text>

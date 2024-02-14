@@ -64,7 +64,7 @@ export const HomePage = ({
             <Heading>{TITLE}</Heading>
             <Text>{DESCRIPTION}</Text>
           </Stack>
-          <SimpleGrid columns={[1, null, 2]} spacing={2}>
+          <SimpleGrid columns={[1, null, 2]} spacing={[4, null, 2]}>
             <Stack>
               <Heading size="md">Latest Blocks</Heading>
               <LatestStackCustomScroll>

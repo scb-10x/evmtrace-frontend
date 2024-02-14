@@ -15,7 +15,13 @@ const metadata = {
   icons: [""],
 };
 
-export const chains = [mainnet, arbitrum, optimism, base, scroll];
+export const chains = [
+  { ...mainnet, icon: "/icons/ethereum.svg" },
+  { ...arbitrum, icon: "/icons/arbitrum.svg" },
+  { ...optimism, icon: "/icons/optimism.svg" },
+  { ...base, icon: "/icons/base.svg" },
+  { ...scroll, icon: "/icons/scroll.svg" },
+];
 
 export const getChain = (chainId: number) => {
   return chains.find((chain) => chain.id === chainId);

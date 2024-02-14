@@ -1,7 +1,7 @@
 import { Hex } from "viem";
 
 export interface ILatestBlock {
-  chain_id: string;
+  chain_id: number;
   number: number;
   timestamp: number;
   hash: Hex;

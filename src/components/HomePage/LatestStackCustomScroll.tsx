@@ -3,7 +3,7 @@ import { Stack, StackProps } from "@chakra-ui/react";
 export const LatestStackCustomScroll = (props: StackProps) => {
   return (
     <Stack
-      maxH="lg"
+      maxH="xl"
       overflowY="auto"
       overflowX="hidden"
       sx={{

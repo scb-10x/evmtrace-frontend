@@ -1,13 +1,23 @@
 import { ILatestTransaction } from "@/interfaces/transaction";
 import { formatAddress } from "@/utils/address";
 import { formatHex } from "@/utils/string";
-import { Badge, Card, Circle, HStack, Stack, Text } from "@chakra-ui/react";
+import {
+  Badge,
+  Card,
+  Circle,
+  HStack,
+  Icon,
+  Stack,
+  Text,
+} from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import moment from "@/constants/moment";
 import { formatEther } from "viem";
 import { getChain } from "@/constants/web3";
 import { HexHighlightBadge } from "../Badge/HexHighlightBadge";
+import { LuArrowRight, LuMoveRight } from "react-icons/lu";
+import { ChainIcon } from "../Icon/ChainIcon";
 
 export const LatestTransactionCard = ({
   index,
@@ -38,13 +48,20 @@ export const LatestTransactionCard = ({
     >
       <Card p={2}>
         <HStack>
-          <Circle bg="chakra-body-bg" size={12}>
-            {tx.chain_id}
+          <Circle bg="chakra-body-bg" size={12} pos="relative">
+            Tx
+            <ChainIcon
+              chainId={tx.chain_id}
+              boxSize={6}
+              pos="absolute"
+              right={2}
+              bottom={2}
+              transform="translate(50%, 50%)"
+            />
           </Circle>
           <Stack spacing={0}>
             <HStack>
               <HexHighlightBadge>{tx.transaction_hash}</HexHighlightBadge>
-              <Badge fontSize="sm">{tx.transaction_index}</Badge>
               <Badge fontSize="sm" colorScheme={tx.error ? "red" : "green"}>
                 {tx.error ?? "Success"}
               </Badge>
@@ -59,10 +76,11 @@ export const LatestTransactionCard = ({
                 </Badge>
               )}
             </HStack>
-            <Text>
-              From <HexHighlightBadge>{tx.from_address}</HexHighlightBadge> To{" "}
+            <HStack>
+              <HexHighlightBadge>{tx.from_address}</HexHighlightBadge>
+              <Icon as={LuMoveRight} />
               <HexHighlightBadge>{tx.to_address}</HexHighlightBadge>
-            </Text>
+            </HStack>
             {tx.ec_recover_addresses.length > 0 && (
               <HStack>
                 <Text color="cyan.300">

@@ -28,7 +28,15 @@ export const HexHighlightBadge = ({ children, ...props }: TextProps) => {
   const isHighlighted = typeof children === "string" && children === highlight;
 
   return (
-    <Popover trigger="hover" isLazy openDelay={0} returnFocusOnClose={false}>
+    <Popover
+      trigger="hover"
+      isLazy
+      openDelay={0}
+      returnFocusOnClose={false}
+      computePositionOnMount={false}
+      autoFocus={false}
+      eventListeners={false}
+    >
       <PopoverTrigger>
         <chakra.span
           transition="0.2s ease-in-out all"
