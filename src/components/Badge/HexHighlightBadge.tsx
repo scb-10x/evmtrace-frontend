@@ -1,6 +1,7 @@
 import { formatAddress } from "@/utils/address";
 import { formatHex } from "@/utils/string";
 import {
+  Icon,
   Popover,
   PopoverContent,
   PopoverTrigger,
@@ -8,7 +9,9 @@ import {
   Text,
   TextProps,
   chakra,
+  useToast,
 } from "@chakra-ui/react";
+import { LuCopy } from "react-icons/lu";
 import { Address, Hex } from "viem";
 import { create } from "zustand";
 
@@ -24,6 +27,7 @@ const useHighlight = create<{
 
 export const HexHighlightBadge = ({ children, ...props }: TextProps) => {
   const { highlight, setHighlight, clearHighlight } = useHighlight();
+  const toast = useToast();
 
   const isHighlighted = typeof children === "string" && children === highlight;
 
@@ -58,6 +62,22 @@ export const HexHighlightBadge = ({ children, ...props }: TextProps) => {
               ? formatHex(children)
               : formatAddress(children)
             : children}
+          {isHighlighted && (
+            <chakra.span
+              display="inline-block"
+              verticalAlign={-2}
+              pl={1}
+              onClick={() => {
+                toast({
+                  title: "Copied",
+                  status: "success",
+                });
+                window.navigator.clipboard.writeText(children);
+              }}
+            >
+              <Icon as={LuCopy} boxSize={3} />
+            </chakra.span>
+          )}
         </chakra.span>
       </PopoverTrigger>
       <Portal>

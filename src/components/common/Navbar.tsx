@@ -68,7 +68,9 @@ export const Navbar = () => {
             <Title />
             <DesktopNav />
           </HStack>
-          <w3m-button size="sm" />
+          {
+            //<w3m-button size="sm" />
+          }
         </Flex>
 
         <Collapse in={isOpen} animateOpacity>
