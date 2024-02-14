@@ -1,3 +1,4 @@
-export const TITLE = "zkscan";
-export const TITLE_SHORT = "zkscan";
-export const DESCRIPTION = "block explorer for zk and aa transactions";
+export const TITLE = "evmtrace";
+export const TITLE_SHORT = "evmtrace";
+export const DESCRIPTION =
+  "block investigator for evm, focused on zk and aa transactions";
