@@ -62,22 +62,24 @@ export const HexHighlightBadge = ({ children, ...props }: TextProps) => {
               ? formatHex(children)
               : formatAddress(children)
             : children}
-          {isHighlighted && (
-            <chakra.span
-              display="inline-block"
-              verticalAlign={-2}
-              pl={1}
-              onClick={() => {
-                toast({
-                  title: "Copied",
-                  status: "success",
-                });
-                window.navigator.clipboard.writeText(children);
-              }}
-            >
-              <Icon as={LuCopy} boxSize={3} />
-            </chakra.span>
-          )}
+          {
+            //isHighlighted && (
+            //<chakra.span
+            //display="inline-block"
+            //verticalAlign={-2}
+            //pl={1}
+            //onClick={() => {
+            //toast({
+            //title: "Copied",
+            //status: "success",
+            //});
+            //window.navigator.clipboard.writeText(children);
+            //}}
+            //>
+            //<Icon as={LuCopy} boxSize={3} />
+            //</chakra.span>
+            //)
+          }
         </chakra.span>
       </PopoverTrigger>
       <Portal>
