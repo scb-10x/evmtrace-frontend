@@ -19,6 +19,7 @@ import { LatestTransactionCard } from "@/components/Card/LatestTransactionCard";
 import { LatestStackCustomScroll } from "@/components/HomePage/LatestStackCustomScroll";
 import { chains } from "@/constants/web3";
 import { useLatest } from "@/hooks/useLatest";
+import Link from "next/link";
 
 export async function getServerSideProps() {
   const [txs, blocks] = await Promise.all([getLatestTxs(), getLatestBlocks()]);
@@ -67,7 +68,9 @@ export const HomePage = ({
                 ))}
               </AnimatePresence>
             </LatestStackCustomScroll>
-            <Button>View All Latest Blocks</Button>
+            <Button as={Link} href="/latest/blocks">
+              View All Latest Blocks
+            </Button>
           </Stack>
           <Stack>
             <Heading size="md">Latest Transactions</Heading>
@@ -82,7 +85,9 @@ export const HomePage = ({
                 ))}
               </AnimatePresence>
             </LatestStackCustomScroll>
-            <Button>View All Latest Transactions</Button>
+            <Button as={Link} href="/latest/txs">
+              View All Latest Transactions
+            </Button>
           </Stack>
         </SimpleGrid>
       </Section>

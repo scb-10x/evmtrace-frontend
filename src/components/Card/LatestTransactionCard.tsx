@@ -18,21 +18,13 @@ import { getChain } from "@/constants/web3";
 import { HexHighlightBadge } from "../Badge/HexHighlightBadge";
 import { LuArrowRight, LuMoveRight } from "react-icons/lu";
 import { ChainIcon } from "../Icon/ChainIcon";
+import { useSince } from "@/hooks/useSince";
 
 export const LatestTransactionCard = ({
   index,
   ...tx
 }: { index: number } & ILatestTransaction) => {
-  const calculateSince = () => moment(tx.block_timestamp * 1000).fromNow();
-
-  const [since, setSince] = useState(calculateSince());
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setSince(calculateSince());
-    }, 1000);
-    return () => clearInterval(interval);
-  }, []);
+  const since = useSince(tx.block_timestamp * 1000);
 
   return (
     <motion.div

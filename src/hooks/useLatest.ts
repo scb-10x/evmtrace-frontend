@@ -17,14 +17,14 @@ export const useLatest = ({
     let blockSse: EventSource | null = null;
     let txsSse: EventSource | null = null;
 
-    if (initialBlocks) {
+    if (initialBlocks !== undefined) {
       blockSse = getSseLatestBlocks();
       blockSse.onmessage = (event) => {
         setBlocks(JSON.parse(event.data).data);
       };
     }
 
-    if (initialTxs) {
+    if (initialTxs !== undefined) {
       txsSse = getSseLatestTxs();
       txsSse.onmessage = (event) => {
         setTxs(JSON.parse(event.data).data);

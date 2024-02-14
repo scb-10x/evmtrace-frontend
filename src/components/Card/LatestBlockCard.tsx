@@ -6,21 +6,13 @@ import { useEffect, useState } from "react";
 import moment from "@/constants/moment";
 import { HexHighlightBadge } from "../Badge/HexHighlightBadge";
 import { ChainIcon } from "../Icon/ChainIcon";
+import { useSince } from "@/hooks/useSince";
 
 export const LatestBlockCard = ({
   index,
   ...block
 }: { index: number } & ILatestBlock) => {
-  const calculateSince = () => moment(block.timestamp * 1000).fromNow();
-
-  const [since, setSince] = useState(calculateSince());
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setSince(calculateSince());
-    }, 1000);
-    return () => clearInterval(interval);
-  }, []);
+  const since = useSince(block.timestamp * 1000);
 
   return (
     <motion.div
