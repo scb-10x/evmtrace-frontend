@@ -6,6 +6,8 @@ import { IDetailedTransaction } from "@/interfaces/transaction";
 import { getTx } from "@/services/tx";
 import {
   Badge,
+  Button,
+  ButtonGroup,
   Center,
   Code,
   Divider,
@@ -19,8 +21,15 @@ import {
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import moment from "@/constants/moment";
 import numbro from "numbro";
-import { formatEther } from "viem";
+import {
+  decodeAbiParameters,
+  decodeFunctionData,
+  formatEther,
+  parseAbi,
+  parseAbiParameter,
+} from "viem";
 import { PercentageBadge } from "@/components/Badge/PercentageBadge";
+import { useEffect, useMemo, useState } from "react";
 
 interface ITxPageProps {
   tx: IDetailedTransaction | null;
@@ -54,6 +63,31 @@ export const TxPage = ({ tx }: ITxPageProps) => {
           <Center>Transaction not found</Center>
         ) : (
           (() => {
+            const [isFormatted, setIsFormatted] = useState(false);
+            const [abi, parsed] = useMemo(() => {
+              if (!tx.input || !tx.function_name)
+                return [undefined, undefined] as const;
+              try {
+                const abi = parseAbi([
+                  `function ${tx.function_name}` as string,
+                ]) as any[];
+                const result = decodeFunctionData({
+                  abi,
+                  data: tx.input,
+                }) as { args: any[]; functionName: string };
+                return [abi, result] as const;
+              } catch (e) {
+                console.error(e);
+                return [undefined, undefined] as const;
+              }
+            }, []);
+
+            useEffect(() => {
+              if (parsed) {
+                setIsFormatted(true);
+              }
+            }, [parsed]);
+
             return (
               <>
                 <Heading>Transaction Detail</Heading>
@@ -221,7 +255,7 @@ export const TxPage = ({ tx }: ITxPageProps) => {
                 <SectionItem
                   title="Function"
                   value={
-                    <HexHighlightBadge>
+                    <HexHighlightBadge wrap>
                       {tx.function_name || tx.function_signature}
                     </HexHighlightBadge>
                   }
@@ -230,14 +264,35 @@ export const TxPage = ({ tx }: ITxPageProps) => {
                   title="Input"
                   align="start"
                   value={
-                    <Code
-                      overflowWrap="anywhere"
-                      w={["full", null, "70%"]}
-                      maxH="xs"
-                      overflowY="auto"
-                    >
-                      {tx.input}
-                    </Code>
+                    <Stack w={["full", null, "70%"]}>
+                      <ButtonGroup isAttached size="sm">
+                        <Button
+                          isDisabled={!parsed}
+                          isActive={isFormatted}
+                          pointerEvents={isFormatted ? "none" : "auto"}
+                          onClick={() => setIsFormatted(true)}
+                        >
+                          Formatted
+                        </Button>
+                        <Button
+                          isActive={!isFormatted}
+                          pointerEvents={!isFormatted ? "none" : "auto"}
+                          onClick={() => setIsFormatted(false)}
+                        >
+                          Raw
+                        </Button>
+                      </ButtonGroup>
+                      <Code
+                        overflowWrap="anywhere"
+                        maxH="xs"
+                        overflowY="auto"
+                        whiteSpace="pre-wrap"
+                      >
+                        {isFormatted
+                          ? JSON.stringify(parsed, null, 1)
+                          : tx.input}
+                      </Code>
+                    </Stack>
                   }
                 />
               </>
