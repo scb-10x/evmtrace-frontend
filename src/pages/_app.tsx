@@ -8,6 +8,8 @@ import { wagmiConfig } from "@/constants/web3";
 import { WagmiConfig } from "wagmi";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { GoogleAnalytics } from "nextjs-google-analytics";
+import ProgressBar from "@uiuxarghya/progress-bar";
+import { Router } from "next/router";
 
 // Font
 import "@fontsource/inconsolata/400.css";
@@ -16,6 +18,9 @@ import "@fontsource/inconsolata/600.css";
 import "@fontsource/inconsolata/700.css";
 
 const client = new QueryClient();
+const progress = new ProgressBar({
+  color: theme.colors.primary[500],
+});
 
 const App = ({ Component, pageProps }: AppProps) => {
   const [showChild, setShowChild] = useState(false);
@@ -23,6 +28,11 @@ const App = ({ Component, pageProps }: AppProps) => {
   useEffect(() => {
     setShowChild(true);
   }, []);
+
+  useEffect(() => {
+    Router.events.on("routeChangeStart", progress.start);
+    Router.events.on("routeChangeComplete", progress.finish);
+  }, [Router]);
 
   return (
     <>
