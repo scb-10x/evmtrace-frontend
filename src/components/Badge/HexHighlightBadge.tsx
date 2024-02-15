@@ -32,7 +32,8 @@ export const HexHighlightBadge = ({
 
   const isHighlighted = children?.toString() === highlight;
   const isExpanded =
-    children?.toString().startsWith("0x") && children?.toString().length > 12;
+    isFull ||
+    (children?.toString().startsWith("0x") && children?.toString().length > 12);
 
   return (
     <Popover

@@ -93,7 +93,7 @@ export const useTransactionColumn = <T extends ITransaction>(
                 display="inline-block"
                 overflow="hidden"
               >
-                <HexHighlightBadge>
+                <HexHighlightBadge isFull>
                   {sterilizedName || signature}
                 </HexHighlightBadge>
               </Text>
