@@ -6,6 +6,12 @@ import {
   Button,
   Wrap,
   Image,
+  Input,
+  InputGroup,
+  InputLeftElement,
+  Icon,
+  InputRightElement,
+  IconButton,
 } from "@chakra-ui/react";
 import { Section, AppHeader } from "@/components/common";
 import _ from "lodash";
@@ -17,6 +23,9 @@ import { LatestStackCustomScroll } from "@/components/HomePage/LatestStackCustom
 import { chains } from "@/constants/web3";
 import { useLatest } from "@/hooks/useLatest";
 import Link from "next/link";
+import { LuArrowRight, LuSearch } from "react-icons/lu";
+import { useState } from "react";
+import { useRouter } from "next/router";
 
 export async function getServerSideProps() {
   return {
@@ -44,6 +53,60 @@ export const HomePage = () => {
             ))}
           </Wrap>
         </Stack>
+        {(() => {
+          const router = useRouter();
+          const [input, setInput] = useState("");
+          return (
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                if (input) {
+                  if (input.length === 66) {
+                    router.push(`/tx/${input}`);
+                  } else if (input.length === 42) {
+                    router.push(`/address/${input}`);
+                  } else if (input.split("/").length === 2) {
+                    const [chainId, blockNumber] = input.split("/");
+                    if (blockNumber) {
+                      router.push(
+                        `/block?chainId=${chainId}&number=${blockNumber}`
+                      );
+                    }
+                  }
+                }
+              }}
+            >
+              <Stack align="center" spacing={1} textAlign="center">
+                <InputGroup w={["full", null, "lg"]} variant="filled">
+                  <InputLeftElement>
+                    <Icon as={LuSearch} />
+                  </InputLeftElement>
+                  <Input
+                    placeholder="Search by block number, tx hash or address"
+                    _focus={{
+                      bg: "whiteAlpha.100",
+                      border: "1 solid",
+                      borderColor: "whiteAlpha.50",
+                      transition: "all 0.2s ease-in-out",
+                    }}
+                    onChange={(e) => setInput(e.target.value)}
+                  />
+                  <InputRightElement>
+                    <IconButton
+                      icon={<Icon as={LuArrowRight} />}
+                      aria-label="Search"
+                      variant="ghost"
+                      type="submit"
+                    />
+                  </InputRightElement>
+                </InputGroup>
+                <Text fontSize="sm" color="gray.200" as="i">
+                  {"{chainId}/{blockNumber} or {txHash} or {address}"}
+                </Text>
+              </Stack>
+            </form>
+          );
+        })()}
         <SimpleGrid columns={[1, null, 2]} spacing={[4, null, 2]}>
           <Stack>
             <Heading size="md">Latest Blocks</Heading>

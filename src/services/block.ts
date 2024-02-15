@@ -22,7 +22,6 @@ export const getBlockTxs = async (
   try {
     return await axios.get(url).then((res) => res.data?.data || null);
   } catch (e) {
-    console.error(e);
     return null;
   }
 };

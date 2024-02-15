@@ -29,7 +29,7 @@ interface ITxPageProps {
 export const getServerSideProps = (async (
   context: GetServerSidePropsContext
 ) => {
-  const { hash: h } = context.query;
+  const { hash: h } = context.params as { hash: string };
   const hash = String(h);
 
   return {

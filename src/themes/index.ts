@@ -5,6 +5,8 @@ import { tooltipTheme } from "./Tooltip";
 import { skeletonTheme } from "./Skeleton";
 import { codeTheme } from "./Code";
 import { badgeTheme } from "./Badge";
+import { inputTheme } from "./Input";
+import { textareaTheme } from "./Textarea";
 
 const breakpoints = {
   base: "0em",
@@ -112,6 +114,8 @@ const theme = extendTheme({
     Skeleton: skeletonTheme,
     Code: codeTheme,
     Badge: badgeTheme,
+    Input: inputTheme,
+    Textarea: textareaTheme,
   },
 
   fonts: {
