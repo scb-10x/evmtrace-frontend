@@ -25,8 +25,9 @@ const useHighlight = create<{
 export const HexHighlightBadge = ({
   href,
   children,
+  isFull,
   ...props
-}: TextProps & { href?: string }) => {
+}: TextProps & { href?: string; isFull?: boolean }) => {
   const { highlight, setHighlight, clearHighlight } = useHighlight();
 
   const isHighlighted = children?.toString() === highlight;
@@ -64,7 +65,7 @@ export const HexHighlightBadge = ({
           href={href}
         >
           {typeof children === "string"
-            ? !children.startsWith("0x") || children.length < 12
+            ? !children.startsWith("0x") || children.length < 12 || isFull
               ? children
               : children.length > 44
               ? formatHex(children)

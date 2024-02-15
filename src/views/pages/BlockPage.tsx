@@ -3,12 +3,27 @@ import { getChain } from "@/constants/web3";
 import { IBlock } from "@/interfaces/block";
 import { IBlockTransaction } from "@/interfaces/transaction";
 import { getBlock, getBlockTxs } from "@/services/block";
-import { Heading, Stack } from "@chakra-ui/react";
+import {
+  Center,
+  HStack,
+  Heading,
+  Image,
+  Stack,
+  Text,
+  Wrap,
+  chakra,
+} from "@chakra-ui/react";
 import { getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { GetServerSidePropsContext, GetServerSideProps } from "next";
 import { AnimatedTable } from "../layouts/AnimatedTable";
 import _ from "lodash";
 import { useTransactionColumn } from "@/hooks/columns/useTransactionColumn";
+import numbro from "numbro";
+import { WrapItem } from "@/components/BlockPage/WrapItem";
+import { PercentageBadge } from "@/components/Badge/PercentageBadge";
+import { SectionItem } from "@/components/BlockPage/SectionItem";
+import moment from "@/constants/moment";
+import { HexHighlightBadge } from "@/components/Badge/HexHighlightBadge";
 
 interface IBlockPageProps {
   block: IBlock | null;
@@ -70,12 +85,142 @@ export const BlockPage = ({
 
   return (
     <>
-      <AppHeader title={`${chain?.name} Block ${block?.number}`} />
+      <AppHeader
+        title={
+          !block ? "Block not found" : `${chain?.name} Block ${block?.number}`
+        }
+      />
       <Section>
-        <Heading>Block {block?.number}</Heading>
-        <Stack></Stack>
-        <Heading size="lg">Transactions</Heading>
-        <AnimatedTable table={table} />
+        {!block || !chain ? (
+          <Center>Block not found</Center>
+        ) : (
+          (() => {
+            return (
+              <>
+                <Stack spacing={0}>
+                  <Heading>Block {block.number}</Heading>
+                  <HStack>
+                    <Image src={chain.icon} alt={chain.name} boxSize={4} />
+                    <Text>
+                      {chain.name}{" "}
+                      <chakra.span as="i">({chain.id})</chakra.span>
+                    </Text>
+                  </HStack>
+                </Stack>
+
+                <Stack>
+                  <SectionItem
+                    title="Hash"
+                    value={
+                      <HexHighlightBadge isFull>{block.hash}</HexHighlightBadge>
+                    }
+                  />
+                  <SectionItem
+                    title="Parent Hash"
+                    value={
+                      <HexHighlightBadge isFull>
+                        {block.parent_hash}
+                      </HexHighlightBadge>
+                    }
+                  />
+                  <SectionItem
+                    title="Timestamp"
+                    value={`${moment(
+                      block.timestamp * 1000
+                    ).fromNow()} | ${moment(block.timestamp * 1000).format()}`}
+                  />
+                  <SectionItem
+                    title="Size"
+                    value={`${block.size} Bytes`}
+                    tooltip="Size of the block in bytes"
+                  />
+                  <SectionItem
+                    title="Transactions"
+                    value={[
+                      <WrapItem
+                        title="Total Txs"
+                        value={block.transaction_count}
+                        tooltip="Total transactions in this block"
+                      />,
+                      <WrapItem
+                        title="Related Txs"
+                        value={txs?.length || 0}
+                        tooltip="Total ZK/AA transactions in this block"
+                      />,
+                      <WrapItem
+                        title="ZK Txs"
+                        value={
+                          txs?.filter((tx) => tx.ec_pairing_count > 0).length ||
+                          0
+                        }
+                        tooltip="Total transaction that uses zk verification or bls signature verification"
+                      />,
+                      <WrapItem
+                        title="AA Txs"
+                        value={
+                          txs?.filter(
+                            (tx) => tx.ec_recover_addresses.length > 0
+                          ).length || 0
+                        }
+                        tooltip="Total transaction that uses EC recover"
+                      />,
+                    ]}
+                  />
+                  <SectionItem
+                    title="Gas"
+                    value={[
+                      <WrapItem
+                        title="Gas Limit"
+                        value={numbro(block.gas_limit).format({
+                          thousandSeparated: true,
+                        })}
+                        tooltip="Total gas limit of all transactions"
+                      />,
+                      <WrapItem
+                        title="Gas Used"
+                        value={numbro(block.gas_used).format({
+                          thousandSeparated: true,
+                        })}
+                        tooltip="Total gas used by all transactions"
+                        suffix={
+                          <PercentageBadge
+                            value={block.gas_used / block.gas_limit}
+                          />
+                        }
+                      />,
+                      <WrapItem
+                        title="GU ZK/AA Txs"
+                        value={numbro(totalTxsGas).format({
+                          thousandSeparated: true,
+                        })}
+                        tooltip="Total gas used by all zk/aa transactions"
+                        suffix={
+                          <PercentageBadge
+                            value={totalTxsGas / block.gas_limit}
+                          />
+                        }
+                      />,
+                      <WrapItem
+                        title="GU ZK/AA Contracts"
+                        value={numbro(totalTxsGasFirstDegree).format({
+                          thousandSeparated: true,
+                        })}
+                        tooltip="Total gas used by all zk/aa contracts (excluding calls to unrelated contracts) in zk/aa transactions"
+                        suffix={
+                          <PercentageBadge
+                            value={totalTxsGasFirstDegree / block.gas_limit}
+                          />
+                        }
+                      />,
+                    ]}
+                  />
+                </Stack>
+                <Heading size="lg">Transactions</Heading>
+                <AnimatedTable table={table} />
+              </>
+            );
+          })()
+        )}
       </Section>
     </>
   );
