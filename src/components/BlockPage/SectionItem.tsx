@@ -1,5 +1,14 @@
-import { HStack, Heading, Icon, Text, Wrap } from "@chakra-ui/react";
-import { Fragment, ReactNode } from "react";
+import {
+  HStack,
+  Heading,
+  Icon,
+  ResponsiveValue,
+  Stack,
+  SystemProps,
+  Text,
+  Wrap,
+} from "@chakra-ui/react";
+import { Fragment, ReactNode, isValidElement } from "react";
 import { InfoTooltip } from "../Tooltips/InfoTooltip";
 import { LuMinus } from "react-icons/lu";
 
@@ -7,10 +16,12 @@ export const SectionItem = ({
   title,
   tooltip,
   value,
+  align,
 }: {
   title: string;
   tooltip?: string;
   value?: ReactNode | ReactNode[];
+  align?: ResponsiveValue<SystemProps["alignItems"]>;
 }) => {
   const isList = Array.isArray(value);
   return (
@@ -22,20 +33,28 @@ export const SectionItem = ({
             <Heading size="md">{title}</Heading>
             {tooltip && <InfoTooltip msg={tooltip} />}
           </HStack>
-          <Wrap spacingX={8} spacingY={2}>
+          <Wrap spacingX={8} spacingY={2} align={align as any}>
             {value.map((v, i) => (
               <Fragment key={i}>{v}</Fragment>
             ))}
           </Wrap>
         </>
       ) : (
-        <Wrap spacingX={8} spacingY={0} align="center">
-          <HStack w={[24, null, 36]}>
+        <Stack
+          spacing={[0, null, 8]}
+          align={[null, null, align || ("center" as any)]}
+          direction={["column", null, "row"]}
+        >
+          <HStack w={[36, null, "2xs"]}>
             <Text as="b">{title}</Text>
             {tooltip && <InfoTooltip msg={tooltip} />}
           </HStack>
-          <Text overflowWrap="anywhere">{value}</Text>
-        </Wrap>
+          {isValidElement(value) ? (
+            value
+          ) : (
+            <Text overflowWrap="anywhere">{value}</Text>
+          )}
+        </Stack>
       )}
     </>
   );

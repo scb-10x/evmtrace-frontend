@@ -115,7 +115,7 @@ export const BlockPage = ({
                   <SectionItem
                     title="Hash"
                     value={
-                      <HexHighlightBadge isFull w="full">
+                      <HexHighlightBadge isFull wrap>
                         {block.hash}
                       </HexHighlightBadge>
                     }
@@ -123,7 +123,7 @@ export const BlockPage = ({
                   <SectionItem
                     title="Parent Hash"
                     value={
-                      <HexHighlightBadge isFull w="full">
+                      <HexHighlightBadge isFull wrap>
                         {block.parent_hash}
                       </HexHighlightBadge>
                     }

@@ -26,8 +26,9 @@ export const HexHighlightBadge = ({
   href,
   children,
   isFull,
+  wrap,
   ...props
-}: TextProps & { href?: string; isFull?: boolean }) => {
+}: TextProps & { href?: string; isFull?: boolean; wrap?: boolean }) => {
   const { highlight, setHighlight, clearHighlight } = useHighlight();
 
   const isHighlighted = children?.toString() === highlight;
@@ -56,7 +57,7 @@ export const HexHighlightBadge = ({
           border="1px dashed"
           borderRadius="md"
           w="fit-content"
-          overflowWrap="inherit"
+          overflowWrap={wrap ? "anywhere" : "inherit"}
           {...props}
           color={isHighlighted ? "yellow.300" : props.color || "inherit"}
           cursor={isHighlighted && href ? "pointer" : props.cursor || "default"}

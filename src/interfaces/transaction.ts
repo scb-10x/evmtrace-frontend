@@ -14,6 +14,17 @@ export interface ITransaction {
   function_name?: string;
 }
 
+export type IDetailedTransaction = ITransaction & {
+  block_number: number;
+  block_timestamp: number;
+  input: Hex;
+  gas_used_total: number;
+  gas_used_first_degree: number;
+  ec_recover_count: number;
+  ec_pairing_input_sizes: number[];
+  closest_address: Address[];
+};
+
 export type IBlockTransaction = ITransaction & {
   gas_used_total: number;
   gas_used_first_degree: number;

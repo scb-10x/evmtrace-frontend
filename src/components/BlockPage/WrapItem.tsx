@@ -1,6 +1,6 @@
 import { HStack, Stack, Text } from "@chakra-ui/react";
 import { InfoTooltip } from "../Tooltips/InfoTooltip";
-import { ReactNode } from "react";
+import { ReactNode, isValidElement } from "react";
 
 export const WrapItem = ({
   title,
@@ -9,7 +9,7 @@ export const WrapItem = ({
   suffix,
 }: {
   title: ReactNode;
-  value: string | number;
+  value: ReactNode;
   tooltip?: string;
   suffix?: ReactNode;
 }) => {
@@ -20,7 +20,7 @@ export const WrapItem = ({
         {tooltip && <InfoTooltip msg={tooltip} />}
         {suffix && suffix}
       </HStack>
-      <Text fontSize="xl">{value}</Text>
+      {isValidElement(value) ? value : <Text fontSize="xl">{value}</Text>}
     </Stack>
   );
 };

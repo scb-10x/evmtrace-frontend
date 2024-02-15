@@ -39,7 +39,10 @@ export const LatestTransactionCard = ({
           </Circle>
           <Stack spacing={0}>
             <HStack>
-              <HexHighlightBadge as="b">
+              <HexHighlightBadge
+                as="b"
+                href={`/tx?hash=${tx.transaction_hash}`}
+              >
                 {tx.transaction_hash}
               </HexHighlightBadge>
               <Badge colorScheme={tx.error ? "red" : "green"}>
