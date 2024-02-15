@@ -8,6 +8,7 @@ import {
   HStack,
   Heading,
   Image,
+  Link,
   Stack,
   Text,
   Wrap,
@@ -95,6 +96,7 @@ export const BlockPage = ({
           <Center>Block not found</Center>
         ) : (
           (() => {
+            const externalExplorerUrl = `${chain.blockExplorers.default.url}/block/${block.number}`;
             return (
               <>
                 <Stack spacing={0}>
@@ -109,16 +111,19 @@ export const BlockPage = ({
                 </Stack>
 
                 <Stack>
+                  <SectionItem title="Height" value={block.number} />
                   <SectionItem
                     title="Hash"
                     value={
-                      <HexHighlightBadge isFull>{block.hash}</HexHighlightBadge>
+                      <HexHighlightBadge isFull w="full">
+                        {block.hash}
+                      </HexHighlightBadge>
                     }
                   />
                   <SectionItem
                     title="Parent Hash"
                     value={
-                      <HexHighlightBadge isFull>
+                      <HexHighlightBadge isFull w="full">
                         {block.parent_hash}
                       </HexHighlightBadge>
                     }
@@ -133,6 +138,14 @@ export const BlockPage = ({
                     title="Size"
                     value={`${block.size} Bytes`}
                     tooltip="Size of the block in bytes"
+                  />
+                  <SectionItem
+                    title="External Explorer"
+                    value={
+                      <Link isExternal href={externalExplorerUrl}>
+                        {externalExplorerUrl}
+                      </Link>
+                    }
                   />
                   <SectionItem
                     title="Transactions"

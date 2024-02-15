@@ -55,6 +55,7 @@ export const HexHighlightBadge = ({
           border="1px dashed"
           borderRadius="md"
           w="fit-content"
+          overflowWrap="inherit"
           {...props}
           color={isHighlighted ? "yellow.300" : props.color || "inherit"}
           cursor={isHighlighted && href ? "pointer" : props.cursor || "default"}

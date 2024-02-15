@@ -1,6 +1,7 @@
-import { HStack, Heading, Text, Wrap } from "@chakra-ui/react";
+import { HStack, Heading, Icon, Text, Wrap } from "@chakra-ui/react";
 import { Fragment, ReactNode } from "react";
 import { InfoTooltip } from "../Tooltips/InfoTooltip";
+import { LuMinus } from "react-icons/lu";
 
 export const SectionItem = ({
   title,
@@ -17,6 +18,7 @@ export const SectionItem = ({
       {isList ? (
         <>
           <HStack>
+            <Icon as={LuMinus} />
             <Heading size="md">{title}</Heading>
             {tooltip && <InfoTooltip msg={tooltip} />}
           </HStack>
@@ -27,8 +29,8 @@ export const SectionItem = ({
           </Wrap>
         </>
       ) : (
-        <Wrap spacingX={8} spacingY={2}>
-          <HStack w={24}>
+        <Wrap spacingX={8} spacingY={0} align="center">
+          <HStack w={[24, null, 36]}>
             <Text as="b">{title}</Text>
             {tooltip && <InfoTooltip msg={tooltip} />}
           </HStack>
