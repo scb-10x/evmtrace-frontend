@@ -100,6 +100,12 @@ const theme = extendTheme({
       1000: "#344054",
       bginput: "#2b303f",
     },
+    whiteAlpha: {
+      0: "rgba(255, 255, 255, 0)",
+    },
+    blackAlpha: {
+      0: "rgba(0, 0, 0, 0)",
+    },
     background: {
       primary: "#0B0C0D",
       secondary: "#343A3F",

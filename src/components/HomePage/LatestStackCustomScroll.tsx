@@ -30,6 +30,7 @@ export const LatestStackCustomScroll = (props: StackProps) => {
         mask: "linear-gradient(0deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 100%)",
         pointerEvents: "none",
       }}
+      spacing={0}
       {...props}
     />
   );

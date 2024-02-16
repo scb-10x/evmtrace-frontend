@@ -16,7 +16,7 @@ import {
 } from "@chakra-ui/react";
 import { Section, AppHeader } from "@/components/common";
 import _ from "lodash";
-import { DESCRIPTION, TITLE } from "@/constants/texts";
+import { DESCRIPTION } from "@/constants/texts";
 import { AnimatePresence } from "framer-motion";
 import { LatestBlockCard } from "@/components/Card/LatestBlockCard";
 import { LatestTransactionCard } from "@/components/Card/LatestTransactionCard";
@@ -117,7 +117,7 @@ export const HomePage = () => {
             <Heading size="md">Latest Blocks</Heading>
             <LatestStackCustomScroll>
               <AnimatePresence>
-                {blocks.slice(0, 7).map((block, i) => (
+                {blocks.slice(0, 12).map((block, i) => (
                   <LatestBlockCard key={block.hash} index={i} {...block} />
                 ))}
               </AnimatePresence>
@@ -130,7 +130,7 @@ export const HomePage = () => {
             <Heading size="md">Latest Transactions</Heading>
             <LatestStackCustomScroll>
               <AnimatePresence>
-                {txs.slice(0, 7).map((tx, i) => (
+                {txs.slice(0, 10).map((tx, i) => (
                   <LatestTransactionCard
                     key={tx.transaction_hash}
                     index={i}

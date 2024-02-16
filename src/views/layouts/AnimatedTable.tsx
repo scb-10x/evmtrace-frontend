@@ -42,6 +42,15 @@ export const AnimatedTable = <T,>({
                   delay: i * 0.02,
                   duration: 0.5,
                 }}
+                style={{
+                  backgroundColor: "var(--chakra-colors-whiteAlpha-0)",
+                }}
+                whileHover={{
+                  backgroundColor: "var(--chakra-colors-whiteAlpha-50)",
+                  transition: {
+                    duration: 0.2,
+                  },
+                }}
               >
                 {row.getVisibleCells().map((cell) => (
                   <Td key={cell.id}>
