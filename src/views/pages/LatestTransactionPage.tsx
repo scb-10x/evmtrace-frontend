@@ -35,11 +35,7 @@ export const LatestTransactionPage = () => {
           cell: (row) => {
             const [chainId, number] = row.getValue();
             return (
-              <HexHighlightBadge
-                href={`/block?chainId=${chainId}&number=${number}`}
-              >
-                {number}
-              </HexHighlightBadge>
+              <HexHighlightBadge isBlock={number}>{number}</HexHighlightBadge>
             );
           },
         }),

@@ -27,14 +27,25 @@ export const HexHighlightBadge = ({
   children,
   isFull,
   wrap,
+  isBlock,
+  isTx,
+  isAccount,
   ...props
-}: TextProps & { href?: string; isFull?: boolean; wrap?: boolean }) => {
+}: TextProps & {
+  href?: string;
+  isFull?: boolean;
+  wrap?: boolean;
+  isBlock?: number;
+  isTx?: boolean;
+  isAccount?: boolean;
+}) => {
   const { highlight, setHighlight, clearHighlight } = useHighlight();
 
   const isHighlighted = children?.toString() === highlight;
   const isExpanded =
     isFull ||
     (children?.toString().startsWith("0x") && children?.toString().length > 12);
+  const isLink = href !== undefined || isBlock || isTx || isAccount;
 
   return (
     <Popover
@@ -60,12 +71,23 @@ export const HexHighlightBadge = ({
           overflowWrap={wrap ? "anywhere" : "inherit"}
           {...props}
           color={isHighlighted ? "yellow.300" : props.color || "inherit"}
-          cursor={isHighlighted && href ? "pointer" : props.cursor || "default"}
+          cursor={
+            isHighlighted && isLink ? "pointer" : props.cursor || "default"
+          }
           borderColor={
             isHighlighted ? "yellow.300" : props.borderColor || "transparent"
           }
-          as={href ? Link : undefined}
-          href={href}
+          as={isLink ? Link : undefined}
+          href={
+            href ||
+            (isBlock
+              ? `/block?chainId=${isBlock}&number=${children}`
+              : isTx
+              ? `/tx/${children}`
+              : isAccount
+              ? `/account/${children}`
+              : undefined)
+          }
         >
           {typeof children === "string"
             ? !children.startsWith("0x") || children.length < 12 || isFull

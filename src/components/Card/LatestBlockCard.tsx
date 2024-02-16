@@ -13,9 +13,7 @@ export const LatestBlockCard = ({
   return (
     <LatestCard prefix="Bk" chainId={block.chain_id} index={index}>
       <HStack>
-        <HexHighlightBadge
-          href={`/block?chainId=${block.chain_id}&number=${block.number}`}
-        >
+        <HexHighlightBadge isBlock={block.chain_id}>
           {block.number}
         </HexHighlightBadge>
         <Badge>{block.transaction_count} Txs</Badge>

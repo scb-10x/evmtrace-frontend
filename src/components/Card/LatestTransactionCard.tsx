@@ -5,6 +5,7 @@ import { getChain } from "@/constants/web3";
 import { HexHighlightBadge } from "../Badge/HexHighlightBadge";
 import { useSince } from "@/hooks/useSince";
 import { LatestCard } from "../HomePage/LatestCard";
+import numbro from "numbro";
 
 export const LatestTransactionCard = ({
   index,
@@ -15,7 +16,7 @@ export const LatestTransactionCard = ({
   return (
     <LatestCard prefix="Tx" chainId={tx.chain_id} index={index}>
       <HStack>
-        <HexHighlightBadge as="b" href={`/tx/${tx.transaction_hash}`}>
+        <HexHighlightBadge as="b" isTx>
           {tx.transaction_hash}
         </HexHighlightBadge>
         <Badge colorScheme={tx.error ? "red" : "green"}>
@@ -52,15 +53,18 @@ export const LatestTransactionCard = ({
       <HStack fontSize={["xs", null, "sm"]}>
         <Text as="i" color="gray.200">
           Block{" "}
-          <HexHighlightBadge
-            href={`/block?chainId=${tx.chain_id}&number=${tx.block_number}`}
-          >
+          <HexHighlightBadge isBlock={tx.chain_id}>
             {tx.block_number}
           </HexHighlightBadge>{" "}
           Since {since}
         </Text>
         <Badge>
-          {formatEther(tx.value)} {getChain(tx.chain_id)?.nativeCurrency.symbol}
+          {numbro(formatEther(tx.value)).format({
+            mantissa: 4,
+            optionalMantissa: true,
+            thousandSeparated: true,
+          })}{" "}
+          {getChain(tx.chain_id)?.nativeCurrency.symbol}
         </Badge>
       </HStack>
     </LatestCard>

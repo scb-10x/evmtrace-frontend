@@ -112,9 +112,7 @@ export const TxPage = ({ tx }: ITxPageProps) => {
                   <SectionItem
                     title="Block Height"
                     value={
-                      <HexHighlightBadge
-                        href={`/block?chainId=${tx.chain_id}&number=${tx.block_number}`}
-                      >
+                      <HexHighlightBadge isBlock={tx.chain_id}>
                         {tx.block_number}
                       </HexHighlightBadge>
                     }
@@ -180,6 +178,7 @@ export const TxPage = ({ tx }: ITxPageProps) => {
                     value={`${numbro(formatEther(tx.value)).format({
                       mantissa: 18,
                       optionalMantissa: true,
+                      trimMantissa: true,
                       thousandSeparated: true,
                     })} ${chain.nativeCurrency.symbol}`}
                   />

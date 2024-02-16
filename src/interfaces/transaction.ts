@@ -34,3 +34,15 @@ export type ILatestTransaction = ITransaction & {
   block_number: number;
   block_timestamp: number;
 };
+
+export enum IAccountType {
+  FROM = "from",
+  TO = "to",
+  RECOVERED = "recovered",
+  RELATED = "related",
+}
+export type IAccountTransaction = ITransaction & {
+  block_number: number;
+  closest_address: Address[];
+  type: IAccountType[];
+};

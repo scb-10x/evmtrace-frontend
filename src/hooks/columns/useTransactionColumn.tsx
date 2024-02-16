@@ -24,7 +24,7 @@ export const useTransactionColumn = <T extends ITransaction>(
               <Badge colorScheme={error ? "red" : "green"}>
                 {error || "Success"}
               </Badge>
-              <HexHighlightBadge href={`/tx/${hash}`}>{hash}</HexHighlightBadge>
+              <HexHighlightBadge isTx>{hash}</HexHighlightBadge>
             </Stack>
           );
         },
