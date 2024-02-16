@@ -115,7 +115,11 @@ export const AccountPage = ({ txs, address }: IAccountPageProps) => {
         {!address ? (
           <Center>Address not found</Center>
         ) : (
-          <InnerAccountPage address={address} table={table} />
+          <InnerAccountPage
+            address={address}
+            table={table}
+            txLength={txs?.length || 0}
+          />
         )}
       </Section>
     </>
@@ -125,9 +129,11 @@ export const AccountPage = ({ txs, address }: IAccountPageProps) => {
 const InnerAccountPage = ({
   address,
   table,
+  txLength,
 }: {
   address: Address;
   table: Table<IAccountTransaction>;
+  txLength: number;
 }) => {
   const { data: ensName } = useEnsName({
     address: address,
@@ -168,7 +174,7 @@ const InnerAccountPage = ({
           <IconButton
             icon={<Icon as={LuChevronRight} />}
             aria-label="Back"
-            isDisabled={page > 10}
+            isDisabled={page > 10 || txLength < 50}
             onClick={() => router.push(`/address/${address}?page=${page + 1}`)}
           />
         </ButtonGroup>
