@@ -41,7 +41,9 @@ export const LatestTransactionCard = ({
         <HStack fontSize="sm">
           <Text color="cyan.300">
             Related{" "}
-            <HexHighlightBadge>{tx.ec_recover_addresses[0]}</HexHighlightBadge>
+            <HexHighlightBadge isAccount>
+              {tx.ec_recover_addresses[0]}
+            </HexHighlightBadge>
           </Text>
           {tx.ec_recover_addresses.length > 1 && (
             <Badge colorScheme="cyan">
