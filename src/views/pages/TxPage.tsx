@@ -14,6 +14,7 @@ import {
   HStack,
   Heading,
   Image,
+  Link,
   Stack,
   Text,
   chakra,
@@ -21,13 +22,7 @@ import {
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import moment from "@/constants/moment";
 import numbro from "numbro";
-import {
-  decodeAbiParameters,
-  decodeFunctionData,
-  formatEther,
-  parseAbi,
-  parseAbiParameter,
-} from "viem";
+import { decodeFunctionData, formatEther, parseAbi } from "viem";
 import { PercentageBadge } from "@/components/Badge/PercentageBadge";
 import { useEffect, useMemo, useState } from "react";
 
@@ -64,7 +59,7 @@ export const TxPage = ({ tx }: ITxPageProps) => {
         ) : (
           (() => {
             const [isFormatted, setIsFormatted] = useState(false);
-            const [abi, parsed] = useMemo(() => {
+            const [, parsed] = useMemo(() => {
               if (!tx.input || !tx.function_name)
                 return [undefined, undefined] as const;
               try {
@@ -87,6 +82,8 @@ export const TxPage = ({ tx }: ITxPageProps) => {
                 setIsFormatted(true);
               }
             }, [parsed]);
+
+            const externalExplorerUrl = `${chain.blockExplorers.default.url}/tx/${tx.transaction_hash}`;
 
             return (
               <>
@@ -136,6 +133,14 @@ export const TxPage = ({ tx }: ITxPageProps) => {
                       <HexHighlightBadge isFull wrap>
                         {tx.transaction_hash}
                       </HexHighlightBadge>
+                    }
+                  />
+                  <SectionItem
+                    title="External Explorer"
+                    value={
+                      <Link isExternal href={externalExplorerUrl}>
+                        {externalExplorerUrl}
+                      </Link>
                     }
                   />
                   <Divider my={4} />
@@ -264,7 +269,7 @@ export const TxPage = ({ tx }: ITxPageProps) => {
                   title="Input"
                   align="start"
                   value={
-                    <Stack w={["full", null, "70%"]}>
+                    <Stack>
                       <ButtonGroup isAttached size="sm">
                         <Button
                           isDisabled={!parsed}
@@ -289,7 +294,14 @@ export const TxPage = ({ tx }: ITxPageProps) => {
                         whiteSpace="pre-wrap"
                       >
                         {isFormatted
-                          ? JSON.stringify(parsed, null, 1)
+                          ? JSON.stringify(
+                              parsed,
+                              (_, value) =>
+                                typeof value === "bigint"
+                                  ? value.toString()
+                                  : value, // return everything else unchanged
+                              2
+                            )
                           : tx.input}
                       </Code>
                     </Stack>

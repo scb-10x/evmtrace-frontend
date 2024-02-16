@@ -11,7 +11,6 @@ import {
   Link,
   Stack,
   Text,
-  Wrap,
   chakra,
 } from "@chakra-ui/react";
 import { getCoreRowModel, useReactTable } from "@tanstack/react-table";
