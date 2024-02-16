@@ -12,6 +12,7 @@ import {
   Icon,
   InputRightElement,
   IconButton,
+  chakra,
 } from "@chakra-ui/react";
 import { Section, AppHeader } from "@/components/common";
 import _ from "lodash";
@@ -26,6 +27,7 @@ import Link from "next/link";
 import { LuArrowRight, LuSearch } from "react-icons/lu";
 import { useState } from "react";
 import { useRouter } from "next/router";
+import { MainLogo } from "@/components/common/MainLogo";
 
 export async function getServerSideProps() {
   return {
@@ -44,7 +46,10 @@ export const HomePage = () => {
       <AppHeader title="Home" />
       <Section>
         <Stack align="center" textAlign="center">
-          <Heading>{TITLE}</Heading>
+          <MainLogo boxSize={24} />
+          <Heading>
+            <chakra.span color="primary.400">evm</chakra.span>trace
+          </Heading>
           <Text>{DESCRIPTION}</Text>
           <Heading size="md">Supported Chains</Heading>
           <Wrap align="center" justify="center" w="100%">

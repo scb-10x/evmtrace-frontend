@@ -57,7 +57,7 @@ const theme = extendTheme({
       800: "#0F266C",
       900: "#07184A",
     },
-    primary: {
+    accent_red: {
       900: "#a62630",
       800: "#bc2a36",
       700: "#d12f3b",
@@ -69,6 +69,18 @@ const theme = extendTheme({
       100: "#eeaab0",
       50: "#f3bfc3",
       accent: "#d6434e",
+    },
+    primary: {
+      50: "#a79ee5",
+      100: "#988ee0",
+      200: "#897ddc",
+      300: "#7b6dd7",
+      400: "#6c5dd3",
+      500: "#6154be",
+      600: "#564aa9",
+      700: "#4c4194",
+      800: "#41387f",
+      900: "#362f6a",
     },
     gray: {
       25: "#FCFCFD",

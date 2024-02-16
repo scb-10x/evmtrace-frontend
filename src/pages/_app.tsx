@@ -39,6 +39,35 @@ const App = ({ Component, pageProps }: AppProps) => {
       <Head>
         <title key="title">{TITLE}</title>
         <meta name="description" content={DESCRIPTION} key="description" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://evmtrace.info/" />
+        <meta key="og-title" property="og:title" content={TITLE} />
+        <meta
+          key="og-description"
+          property="og:description"
+          content={DESCRIPTION}
+        />
+        <meta key="og-image" property="og:image" content="/logo.svg" />
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content="https://evmtrace.info/" />
+        <meta key="twitter-title" property="twitter:title" content={TITLE} />
+        <meta
+          key="twitter-description"
+          property="twitter:description"
+          content={DESCRIPTION}
+        />
+        <meta
+          key="twitter-image"
+          property="twitter:image"
+          content="/logo.svg"
+        />
+        <title key="title">{TITLE}</title>
+        <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+        <meta name="theme-color" content="#05060E" />
+        <meta
+          name="keywords"
+          content="EVM, traces, blockchain, block explorer, zk, aa"
+        />
       </Head>
       {typeof window === "undefined" || !showChild ? (
         <></>
