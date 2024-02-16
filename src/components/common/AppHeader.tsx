@@ -10,10 +10,10 @@ export const AppHeader = ({
 }) => {
   return (
     <Head>
-      <title key="title">
-        {TITLE} | {title}
-      </title>
-      <meta name="description" content={description} key="description" />
+      <title key="title">{title ? `${title} | ${TITLE}` : TITLE}</title>
+      {description && (
+        <meta name="description" content={description} key="description" />
+      )}
     </Head>
   );
 };
