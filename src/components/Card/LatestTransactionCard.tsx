@@ -31,11 +31,11 @@ export const LatestTransactionCard = ({
         <Badge colorScheme="yellow" variant="outline">
           From
         </Badge>
-        <HexHighlightBadge>{tx.from_address}</HexHighlightBadge>
+        <HexHighlightBadge isAccount>{tx.from_address}</HexHighlightBadge>
         <Badge colorScheme="blue" variant="outline">
           To
         </Badge>
-        <HexHighlightBadge>{tx.to_address}</HexHighlightBadge>
+        <HexHighlightBadge isAccount>{tx.to_address}</HexHighlightBadge>
       </HStack>
       {tx.ec_recover_addresses.length > 0 && (
         <HStack fontSize="sm">

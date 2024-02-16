@@ -145,7 +145,7 @@ export const TxPage = ({ tx }: ITxPageProps) => {
                   <SectionItem
                     title="From"
                     value={
-                      <HexHighlightBadge isFull wrap>
+                      <HexHighlightBadge isFull wrap isAccount>
                         {tx.from_address}
                       </HexHighlightBadge>
                     }
@@ -153,7 +153,7 @@ export const TxPage = ({ tx }: ITxPageProps) => {
                   <SectionItem
                     title="Interact With (To)"
                     value={
-                      <HexHighlightBadge isFull wrap>
+                      <HexHighlightBadge isFull wrap isAccount>
                         {tx.to_address}
                       </HexHighlightBadge>
                     }
@@ -165,7 +165,7 @@ export const TxPage = ({ tx }: ITxPageProps) => {
                     value={
                       <Stack spacing={0}>
                         {tx.closest_address.map((a) => (
-                          <HexHighlightBadge isFull wrap key={a}>
+                          <HexHighlightBadge isFull wrap key={a} isAccount>
                             {a}
                           </HexHighlightBadge>
                         ))}
@@ -245,7 +245,7 @@ export const TxPage = ({ tx }: ITxPageProps) => {
                         value={
                           <Stack spacing={0}>
                             {tx.ec_recover_addresses.map((a) => (
-                              <HexHighlightBadge isFull wrap key={a}>
+                              <HexHighlightBadge isFull wrap key={a} isAccount>
                                 {a}
                               </HexHighlightBadge>
                             ))}

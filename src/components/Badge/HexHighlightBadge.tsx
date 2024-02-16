@@ -85,7 +85,7 @@ export const HexHighlightBadge = ({
               : isTx
               ? `/tx/${children}`
               : isAccount
-              ? `/account/${children}`
+              ? `/address/${children}`
               : undefined)
           }
         >

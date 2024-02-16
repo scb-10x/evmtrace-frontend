@@ -39,13 +39,13 @@ export const useTransactionColumn = <T extends ITransaction>(
                 <Badge colorScheme="yellow" variant="outline">
                   From
                 </Badge>
-                <HexHighlightBadge>{from}</HexHighlightBadge>
+                <HexHighlightBadge isAccount>{from}</HexHighlightBadge>
               </HStack>
               <HStack>
                 <Badge colorScheme="blue" variant="outline">
                   To
                 </Badge>
-                <HexHighlightBadge>{to}</HexHighlightBadge>
+                <HexHighlightBadge isAccount>{to}</HexHighlightBadge>
               </HStack>
             </Stack>
           );
@@ -65,7 +65,7 @@ export const useTransactionColumn = <T extends ITransaction>(
                 </HStack>
                 {addresses.length > 0 && (
                   <HStack>
-                    <HexHighlightBadge color="cyan.300">
+                    <HexHighlightBadge color="cyan.300" isAccount>
                       {addresses[0]}
                     </HexHighlightBadge>
                     {addresses.length > 1 && (

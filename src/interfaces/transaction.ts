@@ -36,11 +36,17 @@ export type ILatestTransaction = ITransaction & {
 };
 
 export enum IAccountType {
-  FROM = "from",
-  TO = "to",
+  FROM = "out",
+  TO = "in",
   RECOVERED = "recovered",
   RELATED = "related",
 }
+export const ACCOUNT_TYPE_COLOR_SCHEME = {
+  [IAccountType.FROM]: "yellow",
+  [IAccountType.TO]: "green",
+  [IAccountType.RECOVERED]: "cyan",
+  [IAccountType.RELATED]: "purple",
+} as const;
 export type IAccountTransaction = ITransaction & {
   block_number: number;
   closest_address: Address[];

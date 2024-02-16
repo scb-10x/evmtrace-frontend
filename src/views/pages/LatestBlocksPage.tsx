@@ -35,9 +35,7 @@ export const LatestBlocksPage = () => {
         cell: (row) => {
           const [chainId, number] = row.getValue();
           return (
-            <HexHighlightBadge isBlock={chainId}>
-              {row.getValue()}
-            </HexHighlightBadge>
+            <HexHighlightBadge isBlock={chainId}>{number}</HexHighlightBadge>
           );
         },
       }),

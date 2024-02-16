@@ -3,31 +3,38 @@ import axios from "axios";
 import { Address, checksumAddress } from "viem";
 
 export const getAccountTxs = async (
-  address: string
-): Promise<IAccountTransaction[] | null> => {
+  address: string,
+  page?: number,
+  size?: number
+): Promise<[IAccountTransaction[] | null, Address | null]> => {
   try {
     const checksumed = checksumAddress(address as Address);
-    const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/account/${checksumed}`;
-    return await axios.get(url).then(
-      (res) =>
-        res.data?.data.map((e: IAccountTransaction) => {
-          const type: IAccountType[] = [];
-          if (e.from_address === checksumed) {
-            type.push(IAccountType.FROM);
-          }
-          if (e.to_address === checksumed) {
-            type.push(IAccountType.TO);
-          }
-          if (e.closest_address.includes(checksumed)) {
-            type.push(IAccountType.RELATED);
-          }
-          if (e.ec_recover_addresses.includes(checksumed)) {
-            type.push(IAccountType.RECOVERED);
-          }
-          return { ...e, type } as IAccountTransaction;
-        }) || null
-    );
+    const url = `${
+      process.env.NEXT_PUBLIC_API_URL
+    }/api/v1/address/${checksumed}?page=${page || 0}&size=${size || 50}`;
+    return [
+      await axios.get(url).then(
+        (res) =>
+          res.data?.data.map((e: IAccountTransaction) => {
+            const type: IAccountType[] = [];
+            if (e.from_address === checksumed) {
+              type.push(IAccountType.FROM);
+            }
+            if (e.to_address === checksumed) {
+              type.push(IAccountType.TO);
+            }
+            if (e.closest_address.includes(checksumed)) {
+              type.push(IAccountType.RELATED);
+            }
+            if (e.ec_recover_addresses.includes(checksumed)) {
+              type.push(IAccountType.RECOVERED);
+            }
+            return { ...e, type } as IAccountTransaction;
+          }) || null
+      ),
+      checksumed,
+    ];
   } catch (e) {
-    return null;
+    return [null, null];
   }
 };

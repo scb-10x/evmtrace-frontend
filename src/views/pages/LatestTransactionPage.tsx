@@ -2,7 +2,7 @@ import { AppHeader, Section } from "@/components/common";
 import { getChain } from "@/constants/web3";
 import { useLatest } from "@/hooks/useLatest";
 import { ILatestTransaction } from "@/interfaces/transaction";
-import { Heading, Image } from "@chakra-ui/react";
+import { HStack, Heading, Image } from "@chakra-ui/react";
 import {
   createColumnHelper,
   getCoreRowModel,
@@ -22,20 +22,18 @@ export const LatestTransactionPage = () => {
     const columnHelper = createColumnHelper<ILatestTransaction>();
     return {
       prefix: [
-        columnHelper.accessor("chain_id", {
-          header: "Chain",
-          cell: (row) => {
-            const chainId = row.getValue();
-            const chain = getChain(chainId);
-            return <Image src={chain?.icon} boxSize={4} />;
-          },
-        }),
         columnHelper.accessor((r) => [r.chain_id, r.block_number] as const, {
-          header: "Block",
+          header: "Chain/Block",
           cell: (row) => {
             const [chainId, number] = row.getValue();
+            const chain = getChain(chainId);
             return (
-              <HexHighlightBadge isBlock={number}>{number}</HexHighlightBadge>
+              <HStack>
+                <Image src={chain?.icon} boxSize={4} />
+                <HexHighlightBadge isBlock={chainId}>
+                  {number}
+                </HexHighlightBadge>
+              </HStack>
             );
           },
         }),
