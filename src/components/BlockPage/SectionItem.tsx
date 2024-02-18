@@ -46,7 +46,7 @@ export const SectionItem = ({
           align={[null, null, align || ("center" as any)]}
           direction={["column", null, "row"]}
         >
-          <HStack w={[36, null, "2xs"]} flexShrink={0}>
+          <HStack w={["full", null, "2xs"]} flexShrink={0}>
             <Text as="b">{title}</Text>
             {tooltip && <InfoTooltip msg={tooltip} />}
           </HStack>

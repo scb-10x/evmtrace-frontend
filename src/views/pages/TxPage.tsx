@@ -28,9 +28,14 @@ import numbro from "numbro";
 import { decodeFunctionData, formatEther, parseAbi } from "viem";
 import { PercentageBadge } from "@/components/Badge/PercentageBadge";
 import { useEffect, useMemo, useState } from "react";
+import { ITag } from "@/interfaces/tag";
+import { getTags } from "@/services/tag";
+import { TagsBadge } from "@/components/Badge/TagBadge";
+import _ from "lodash";
 
 interface ITxPageProps {
   tx: IDetailedTransaction | null;
+  tags: ITag[] | null;
 }
 
 export const getServerSideProps = (async (
@@ -38,15 +43,20 @@ export const getServerSideProps = (async (
 ) => {
   const { hash: h } = context.params as { hash: string };
   const hash = String(h);
+  const tx = await getTx(hash);
+  const tags = tx
+    ? await getTags([tx.to_address, ...tx.closest_address])
+    : null;
 
   return {
     props: {
-      tx: await getTx(hash),
+      tx,
+      tags,
     },
   };
 }) satisfies GetServerSideProps<ITxPageProps>;
 
-export const TxPage = ({ tx }: ITxPageProps) => {
+export const TxPage = ({ tx, tags }: ITxPageProps) => {
   const chain = getChain(tx?.chain_id);
 
   return (
@@ -105,6 +115,15 @@ export const TxPage = ({ tx }: ITxPageProps) => {
                     }
                   />
                   <SectionItem
+                    title="Tags"
+                    value={
+                      <TagsBadge
+                        tags={_.uniq(tags?.flatMap((e) => e.tags))}
+                        fallback={<Badge>Unknown</Badge>}
+                      />
+                    }
+                  />
+                  <SectionItem
                     title="Status"
                     value={
                       <Badge colorScheme={tx.error ? "red" : "green"}>
@@ -156,9 +175,16 @@ export const TxPage = ({ tx }: ITxPageProps) => {
                   <SectionItem
                     title="Interact With (To)"
                     value={
-                      <HexHighlightBadge isFull wrap isAccount>
-                        {tx.to_address}
-                      </HexHighlightBadge>
+                      <HStack>
+                        <HexHighlightBadge isFull wrap isAccount>
+                          {tx.to_address}
+                        </HexHighlightBadge>
+                        <TagsBadge
+                          tags={
+                            tags?.find((t) => t.address === tx.to_address)?.tags
+                          }
+                        />
+                      </HStack>
                     }
                   />
                   <SectionItem
@@ -168,9 +194,14 @@ export const TxPage = ({ tx }: ITxPageProps) => {
                     value={
                       <Stack spacing={0}>
                         {tx.closest_address.map((a) => (
-                          <HexHighlightBadge isFull wrap key={a} isAccount>
-                            {a}
-                          </HexHighlightBadge>
+                          <HStack key={a}>
+                            <HexHighlightBadge isFull wrap isAccount>
+                              {a}
+                            </HexHighlightBadge>
+                            <TagsBadge
+                              tags={tags?.find((t) => t.address === a)?.tags}
+                            />
+                          </HStack>
                         ))}
                       </Stack>
                     }

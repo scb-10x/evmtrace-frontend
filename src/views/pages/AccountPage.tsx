@@ -27,7 +27,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
-import { Address } from "viem";
+import { Address, checksumAddress } from "viem";
 import { useEnsAvatar, useEnsName } from "wagmi";
 import { AnimatedTable } from "../layouts/AnimatedTable";
 import { getChain } from "@/constants/web3";
@@ -35,29 +35,49 @@ import { HexHighlightBadge } from "@/components/Badge/HexHighlightBadge";
 import { useRouter } from "next/router";
 import { useMemo } from "react";
 import { LuChevronLeft, LuChevronRight } from "react-icons/lu";
+import { getTags } from "@/services/tag";
+import { ITag } from "@/interfaces/tag";
+import { TagsBadge } from "@/components/Badge/TagBadge";
+import _ from "lodash";
 
 interface IAccountPageProps {
   address: Address | null;
   txs: IAccountTransaction[] | null;
+  tags: ITag[] | null;
 }
 
 export const getServerSideProps = (async (
   context: GetServerSidePropsContext
 ) => {
-  const { address: a } = context.params as { address: string };
-  const { page: p } = context.query;
-  const page = p ? parseInt(p as string) : 1;
-  const [txs, address] = await getAccountTxs(a, page - 1);
+  try {
+    const { address: a } = context.params as { address: string };
+    const aChecksumed = checksumAddress(a as Address);
+    const { page: p } = context.query;
+    const page = p ? parseInt(p as string) : 1;
+    const [[txs, address], tags] = await Promise.all([
+      getAccountTxs(aChecksumed, page - 1),
+      getTags([aChecksumed]),
+    ]);
 
-  return {
-    props: {
-      txs,
-      address,
-    },
-  };
+    return {
+      props: {
+        txs,
+        address,
+        tags,
+      },
+    };
+  } catch (e) {
+    return {
+      props: {
+        txs: null,
+        address: null,
+        tags: null,
+      },
+    };
+  }
 }) satisfies GetServerSideProps<IAccountPageProps>;
 
-export const AccountPage = ({ txs, address }: IAccountPageProps) => {
+export const AccountPage = ({ txs, address, tags }: IAccountPageProps) => {
   const columns = useTransactionColumn(() => {
     const columnHelper = createColumnHelper<IAccountTransaction>();
 
@@ -118,6 +138,7 @@ export const AccountPage = ({ txs, address }: IAccountPageProps) => {
             address={address}
             table={table}
             txLength={txs?.length || 0}
+            tags={_.uniq(tags?.flatMap((t) => t.tags))}
           />
         )}
       </Section>
@@ -129,10 +150,12 @@ const InnerAccountPage = ({
   address,
   table,
   txLength,
+  tags,
 }: {
   address: Address;
   table: Table<IAccountTransaction>;
   txLength: number;
+  tags: string[];
 }) => {
   const { data: ensName } = useEnsName({
     address: address,
@@ -161,6 +184,11 @@ const InnerAccountPage = ({
           {ensName || address}
         </Text>
       </HStack>
+      <TagsBadge
+        tags={tags}
+        fallback={<Badge fontSize="md">Unknown</Badge>}
+        fontSize="md"
+      />
       <HStack justify="end">
         <ButtonGroup size="sm" variant="outline">
           <IconButton
