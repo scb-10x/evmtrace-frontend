@@ -7,7 +7,6 @@ export const getAllTags = async (): Promise<string[] | null> => {
   try {
     return await axios.get(url).then((res) => res.data?.data || null);
   } catch (e) {
-    console.error(e);
     return null;
   }
 };
@@ -19,7 +18,21 @@ export const getTags = async (addresses: Address[]): Promise<ITag[] | null> => {
   try {
     return await axios.get(url).then((res) => res.data?.data || null);
   } catch (e) {
-    console.error(e);
+    return null;
+  }
+};
+
+export const getTagAddresses = async (
+  tag: string,
+  page?: number,
+  size?: number
+): Promise<ITag[] | null> => {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/tag/tags/${tag}?page=${
+    page || 0
+  }&size=${size || 50}`;
+  try {
+    return await axios.get(url).then((res) => res.data?.data || null);
+  } catch (e) {
     return null;
   }
 };

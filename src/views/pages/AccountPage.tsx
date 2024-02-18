@@ -172,7 +172,7 @@ const InnerAccountPage = ({
 
   return (
     <>
-      <Heading>Account</Heading>
+      <Heading>{ensName || address}</Heading>
       <HStack>
         <MiniIdenticon
           address={address}

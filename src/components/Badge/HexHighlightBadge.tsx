@@ -10,6 +10,7 @@ import {
   chakra,
 } from "@chakra-ui/react";
 import Link from "next/link";
+import { useEffect } from "react";
 import { create } from "zustand";
 
 const useHighlight = create<{
@@ -46,6 +47,10 @@ export const HexHighlightBadge = ({
     isFull ||
     (children?.toString().startsWith("0x") && children?.toString().length > 12);
   const isLink = href !== undefined || isBlock || isTx || isAccount;
+
+  useEffect(() => {
+    return () => clearHighlight();
+  }, []);
 
   return (
     <Popover

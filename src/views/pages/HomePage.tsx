@@ -132,7 +132,13 @@ export const HomePage = ({ allTags }: IHomePageProps) => {
           </HStack>
           <Wrap fontSize={["md", "lg"]}>
             {allTags?.map((t) => (
-              <TagBadge key={t} tag={t} as={Link} href={`/tag/${t}`} />
+              <TagBadge
+                key={t}
+                tag={t}
+                as={Link}
+                href={`/tag/${t}`}
+                cursor="pointer"
+              />
             ))}
           </Wrap>
         </Stack>
