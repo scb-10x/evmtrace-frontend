@@ -7,5 +7,5 @@ export const ChainIcon = ({
 }: { chainId: number } & ImageProps) => {
   const icon = getChain(chainId)?.icon;
 
-  return <Image src={icon} {...props} />;
+  return <Image boxSize={4} src={icon} {...props} />;
 };

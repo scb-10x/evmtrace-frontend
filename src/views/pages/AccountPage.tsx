@@ -6,9 +6,10 @@ import {
   IAccountTransaction,
   IAccountType,
 } from "@/interfaces/transaction";
-import { getAccountTxs } from "@/services/account";
+import { getAccountProxy, getAccountTxs } from "@/services/account";
 import {
   Badge,
+  Box,
   Button,
   ButtonGroup,
   Center,
@@ -39,11 +40,14 @@ import { getTags } from "@/services/tag";
 import { ITag } from "@/interfaces/tag";
 import { TagsBadge } from "@/components/Badge/TagBadge";
 import _ from "lodash";
+import { IAccountProxy } from "@/interfaces/account";
+import { ChainIcon } from "@/components/Icon/ChainIcon";
 
 interface IAccountPageProps {
   address: Address | null;
   txs: IAccountTransaction[] | null;
   tags: ITag[] | null;
+  proxy: IAccountProxy[] | null;
 }
 
 export const getServerSideProps = (async (
@@ -54,9 +58,11 @@ export const getServerSideProps = (async (
     const aChecksumed = checksumAddress(a as Address);
     const { page: p } = context.query;
     const page = p ? parseInt(p as string) : 1;
+    const proxied = await getAccountProxy(aChecksumed);
     const [[txs, address], tags] = await Promise.all([
       getAccountTxs(aChecksumed, page - 1),
       getTags([aChecksumed]),
+      ...(proxied?.map((p) => p.logic) || []),
     ]);
 
     return {
@@ -64,6 +70,7 @@ export const getServerSideProps = (async (
         txs,
         address,
         tags,
+        proxy: proxied,
       },
     };
   } catch (e) {
@@ -72,12 +79,18 @@ export const getServerSideProps = (async (
         txs: null,
         address: null,
         tags: null,
+        proxy: null,
       },
     };
   }
 }) satisfies GetServerSideProps<IAccountPageProps>;
 
-export const AccountPage = ({ txs, address, tags }: IAccountPageProps) => {
+export const AccountPage = ({
+  txs,
+  address,
+  tags,
+  proxy,
+}: IAccountPageProps) => {
   const columns = useTransactionColumn(() => {
     const columnHelper = createColumnHelper<IAccountTransaction>();
 
@@ -138,7 +151,13 @@ export const AccountPage = ({ txs, address, tags }: IAccountPageProps) => {
             address={address}
             table={table}
             txLength={txs?.length || 0}
-            tags={_.uniq(tags?.flatMap((t) => t.tags))}
+            tags={_.uniq(tags?.find((e) => e.address === address)?.tags)}
+            proxy={proxy?.map((p) => ({
+              ...p,
+              tags: _.uniq(
+                tags?.find((e) => e.address === p.logic)?.tags || []
+              ),
+            }))}
           />
         )}
       </Section>
@@ -151,11 +170,17 @@ const InnerAccountPage = ({
   table,
   txLength,
   tags,
+  proxy,
 }: {
   address: Address;
   table: Table<IAccountTransaction>;
   txLength: number;
   tags: string[];
+  proxy?: {
+    logic: Address;
+    chain_id: number;
+    tags: string[];
+  }[];
 }) => {
   const { data: ensName } = useEnsName({
     address: address,
@@ -172,7 +197,7 @@ const InnerAccountPage = ({
 
   return (
     <>
-      <Heading>{ensName || address}</Heading>
+      <Heading>Account</Heading>
       <HStack>
         <MiniIdenticon
           address={address}
@@ -189,6 +214,21 @@ const InnerAccountPage = ({
         fallback={<Badge fontSize="md">Unknown</Badge>}
         fontSize="md"
       />
+      {!!proxy?.length && (
+        <Stack spacing={0}>
+          <Heading size="md">Proxy</Heading>
+          <Box h={1} />
+          {proxy.map((p) => (
+            <HStack key={p.logic}>
+              <ChainIcon chainId={p.chain_id} />
+              <HexHighlightBadge isAccount isFull>
+                {p.logic}
+              </HexHighlightBadge>
+              <TagsBadge tags={p.tags} />
+            </HStack>
+          ))}
+        </Stack>
+      )}
       <HStack justify="end">
         <ButtonGroup size="sm" variant="outline">
           <IconButton

@@ -1,3 +1,4 @@
+import { IAccountProxy } from "@/interfaces/account";
 import { IAccountTransaction, IAccountType } from "@/interfaces/transaction";
 import axios from "axios";
 import { Address, checksumAddress } from "viem";
@@ -36,5 +37,26 @@ export const getAccountTxs = async (
     ];
   } catch (e) {
     return [null, null];
+  }
+};
+
+export const getAccountProxy = async (
+  address: string
+): Promise<IAccountProxy[] | null> => {
+  const checksumed = checksumAddress(address as Address);
+  try {
+    return await axios
+      .get(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/address/proxy/${checksumed}`
+      )
+      .then(
+        (res) =>
+          res.data?.data.map((e: IAccountProxy) => ({
+            ...e,
+            logic: checksumAddress(e.logic as Address),
+          })) || null
+      );
+  } catch (e) {
+    return null;
   }
 };
