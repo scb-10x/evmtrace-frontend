@@ -35,6 +35,7 @@
     "react-dom": "18.2.0",
     "react-hook-form": "^7.47.0",
     "react-icons": "^4.11.0",
+    "recharts": "^2.12.0",
     "tinycolor2": "^1.6.0",
     "typescript": "5.0.4",
     "uniqolor": "^1.1.1",

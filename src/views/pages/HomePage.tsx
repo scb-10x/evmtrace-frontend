@@ -30,27 +30,34 @@ import { LuArrowRight, LuSearch } from "react-icons/lu";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { MainLogo } from "@/components/common/MainLogo";
-import { GetServerSideProps } from "next";
+import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { getAllTags } from "@/services/tag";
 import { InfoTooltip } from "@/components/Tooltips/InfoTooltip";
 import { TagBadge } from "@/components/Badge/TagBadge";
 import { IAggregatedTag } from "@/interfaces/tag";
 import numbro from "numbro";
+import { getTxCount } from "@/services/stats";
+import { ITxCountStats } from "@/interfaces/stats";
+import { TxCountChart } from "@/components/Chart/TxCountChart";
 
 interface IHomePageProps {
   allTags: IAggregatedTag[] | null;
+  txCount: ITxCountStats[] | null;
 }
 
-export const getServerSideProps = (async () => {
-  const allTags = await getAllTags();
+export const getServerSideProps = (async (
+  context: GetServerSidePropsContext
+) => {
+  const [allTags, txCount] = await Promise.all([getAllTags(), getTxCount()]);
   return {
     props: {
       allTags,
+      txCount,
     },
   };
 }) satisfies GetServerSideProps<IHomePageProps>;
 
-export const HomePage = ({ allTags }: IHomePageProps) => {
+export const HomePage = ({ allTags, txCount }: IHomePageProps) => {
   const { txs, blocks } = useLatest({
     initialBlocks: [],
     initialTxs: [],
@@ -73,6 +80,7 @@ export const HomePage = ({ allTags }: IHomePageProps) => {
             ))}
           </Wrap>
         </Stack>
+
         {(() => {
           const router = useRouter();
           const [input, setInput] = useState("");
@@ -127,6 +135,16 @@ export const HomePage = ({ allTags }: IHomePageProps) => {
             </form>
           );
         })()}
+
+        {txCount?.length && (
+          <Stack>
+            <HStack>
+              <Heading size="md">Transaction Count</Heading>
+              <InfoTooltip msg="Related transaction counts over 5 days period" />
+            </HStack>
+            <TxCountChart stats={txCount} />
+          </Stack>
+        )}
 
         <Stack>
           <HStack>
