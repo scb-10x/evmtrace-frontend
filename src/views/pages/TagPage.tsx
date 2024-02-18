@@ -32,6 +32,9 @@ interface ITagPageProps {
 export const getServerSideProps = (async (
   context: GetServerSidePropsContext
 ) => {
+  // 1 hours
+  context.res.setHeader("Cache-Control", "max-age=3600");
+
   const { tag } = context.params as { tag: string };
   const sanitizedTag = tag.replaceAll("-", " ");
   const { page: p } = context.query;

@@ -41,6 +41,9 @@ interface ITxPageProps {
 export const getServerSideProps = (async (
   context: GetServerSidePropsContext
 ) => {
+  // 4 hours
+  context.res.setHeader("Cache-Control", "max-age=14400");
+
   const { hash: h } = context.params as { hash: string };
   const hash = String(h);
   const tx = await getTx(hash);

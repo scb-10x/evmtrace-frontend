@@ -35,6 +35,9 @@ interface IBlockPageProps {
 export const getServerSideProps = (async (
   context: GetServerSidePropsContext
 ) => {
+  // 4 hours
+  context.res.setHeader("Cache-Control", "max-age=14400");
+
   const { chainId: cid, number } = context.query;
   const chainId = Number(cid);
   const blockNumber = Number(number);

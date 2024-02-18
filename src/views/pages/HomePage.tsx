@@ -48,6 +48,9 @@ interface IHomePageProps {
 export const getServerSideProps = (async (
   context: GetServerSidePropsContext
 ) => {
+  // 4 hours
+  context.res.setHeader("Cache-Control", "max-age=14400");
+
   const [allTags, txCount] = await Promise.all([getAllTags(), getTxCount()]);
   return {
     props: {

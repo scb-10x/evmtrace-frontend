@@ -54,6 +54,9 @@ interface IAccountPageProps {
 export const getServerSideProps = (async (
   context: GetServerSidePropsContext
 ) => {
+  // 10 seconds
+  context.res.setHeader("Cache-Control", "max-age=10");
+
   try {
     const { address: a } = context.params as { address: string };
     const aChecksumed = checksumAddress(a as Address);
