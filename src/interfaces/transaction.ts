@@ -41,14 +41,34 @@ export enum IAccountType {
   RECOVERED = "recovered",
   RELATED = "related",
 }
-export const ACCOUNT_TYPE_COLOR_SCHEME = {
-  [IAccountType.FROM]: "yellow",
-  [IAccountType.TO]: "green",
-  [IAccountType.RECOVERED]: "cyan",
-  [IAccountType.RELATED]: "purple",
+
+export const AccountType = {
+  [IAccountType.FROM]: {
+    colorScheme: "yellow",
+  },
+  [IAccountType.TO]: { colorScheme: "green" },
+  [IAccountType.RECOVERED]: { colorScheme: "cyan" },
+  [IAccountType.RELATED]: { colorScheme: "purple" },
 } as const;
+
 export type IAccountTransaction = ITransaction & {
   block_number: number;
   closest_address: Address[];
   type: IAccountType[];
 };
+
+export enum ITransactionType {
+  ZK = "ZK",
+  RECOVER = "RECOVER",
+}
+
+export const TransactionType = {
+  [ITransactionType.ZK]: {
+    label: "ZK",
+    colorScheme: "orange",
+  },
+  [ITransactionType.RECOVER]: {
+    label: "RECOVER",
+    colorScheme: "cyan",
+  },
+} as const;

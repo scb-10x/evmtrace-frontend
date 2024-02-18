@@ -2,7 +2,10 @@ import { HexHighlightBadge } from "@/components/Badge/HexHighlightBadge";
 import { SectionItem } from "@/components/BlockPage/SectionItem";
 import { AppHeader, Section } from "@/components/common";
 import { getChain } from "@/constants/web3";
-import { IDetailedTransaction } from "@/interfaces/transaction";
+import {
+  IDetailedTransaction,
+  TransactionType,
+} from "@/interfaces/transaction";
 import { getTx } from "@/services/tx";
 import {
   Badge,
@@ -160,7 +163,7 @@ export const TxPage = ({ tx }: ITxPageProps) => {
                   />
                   <SectionItem
                     title="Related Contract"
-                    tooltip="The contracts this transaction interacts with that are related to ZK/AA"
+                    tooltip="The contracts this transaction interacts with that are related to ZK/Recover"
                     align="start"
                     value={
                       <Stack spacing={0}>
@@ -190,7 +193,7 @@ export const TxPage = ({ tx }: ITxPageProps) => {
                     })}
                   />
                   <SectionItem
-                    title="Gas Used By ZK/AA Contracts"
+                    title="Gas Used By ZK/Recover Contracts"
                     value={
                       <HStack>
                         <Text>
@@ -213,10 +216,16 @@ export const TxPage = ({ tx }: ITxPageProps) => {
                     value={
                       <HStack>
                         {tx.ec_pairing_count > 0 && (
-                          <Badge colorScheme="orange">ZK</Badge>
+                          <Badge colorScheme={TransactionType.ZK.colorScheme}>
+                            {TransactionType.ZK.label}
+                          </Badge>
                         )}
                         {tx.ec_recover_addresses.length > 0 && (
-                          <Badge colorScheme="cyan">AA</Badge>
+                          <Badge
+                            colorScheme={TransactionType.RECOVER.colorScheme}
+                          >
+                            {TransactionType.RECOVER.label}
+                          </Badge>
                         )}
                       </HStack>
                     }

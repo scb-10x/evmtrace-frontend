@@ -1,6 +1,6 @@
 import { HexHighlightBadge } from "@/components/Badge/HexHighlightBadge";
 import { getChain } from "@/constants/web3";
-import { ITransaction } from "@/interfaces/transaction";
+import { ITransaction, TransactionType } from "@/interfaces/transaction";
 import { Badge, HStack, Stack, Text } from "@chakra-ui/react";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 import numbro from "numbro";
@@ -60,16 +60,29 @@ export const useTransactionColumn = <T extends ITransaction>(
             return (
               <Stack spacing={1}>
                 <HStack>
-                  {pairingCount > 0 && <Badge colorScheme="orange">ZK</Badge>}
-                  {addresses.length > 0 && <Badge colorScheme="cyan">AA</Badge>}
+                  {pairingCount > 0 && (
+                    <Badge colorScheme={TransactionType.ZK.colorScheme}>
+                      {TransactionType.ZK.label}
+                    </Badge>
+                  )}
+                  {addresses.length > 0 && (
+                    <Badge colorScheme={TransactionType.RECOVER.colorScheme}>
+                      {TransactionType.RECOVER.label}
+                    </Badge>
+                  )}
                 </HStack>
                 {addresses.length > 0 && (
                   <HStack>
-                    <HexHighlightBadge color="cyan.300" isAccount>
+                    <HexHighlightBadge
+                      color={TransactionType.RECOVER.colorScheme}
+                      isAccount
+                    >
                       {addresses[0]}
                     </HexHighlightBadge>
                     {addresses.length > 1 && (
-                      <Badge colorScheme="cyan">+{addresses.length - 1}</Badge>
+                      <Badge colorScheme={TransactionType.RECOVER.colorScheme}>
+                        +{addresses.length - 1}
+                      </Badge>
                     )}
                   </HStack>
                 )}

@@ -1,4 +1,4 @@
-import { ILatestTransaction } from "@/interfaces/transaction";
+import { ILatestTransaction, TransactionType } from "@/interfaces/transaction";
 import { Badge, HStack, Text } from "@chakra-ui/react";
 import { formatEther } from "viem";
 import { getChain } from "@/constants/web3";
@@ -22,9 +22,15 @@ export const LatestTransactionCard = ({
         <Badge colorScheme={tx.error ? "red" : "green"}>
           {tx.error ?? "Success"}
         </Badge>
-        {tx.ec_pairing_count > 0 && <Badge colorScheme="orange">ZK</Badge>}
+        {tx.ec_pairing_count > 0 && (
+          <Badge colorScheme={TransactionType.ZK.colorScheme}>
+            {TransactionType.ZK.label}
+          </Badge>
+        )}
         {tx.ec_recover_addresses.length > 0 && (
-          <Badge colorScheme="cyan">AA</Badge>
+          <Badge colorScheme={TransactionType.RECOVER.colorScheme}>
+            {TransactionType.RECOVER.label}
+          </Badge>
         )}
       </HStack>
       <HStack>
@@ -39,14 +45,14 @@ export const LatestTransactionCard = ({
       </HStack>
       {tx.ec_recover_addresses.length > 0 && (
         <HStack fontSize="sm">
-          <Text color="cyan.300">
+          <Text color={TransactionType.RECOVER.colorScheme}>
             Related{" "}
             <HexHighlightBadge isAccount>
               {tx.ec_recover_addresses[0]}
             </HexHighlightBadge>
           </Text>
           {tx.ec_recover_addresses.length > 1 && (
-            <Badge colorScheme="cyan">
+            <Badge colorScheme={TransactionType.RECOVER.colorScheme}>
               +{tx.ec_recover_addresses.length - 1}
             </Badge>
           )}

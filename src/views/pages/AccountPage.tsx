@@ -2,7 +2,7 @@ import { MiniIdenticon } from "@/components/Icon/MiniIdenticon";
 import { AppHeader, Section } from "@/components/common";
 import { useTransactionColumn } from "@/hooks/columns/useTransactionColumn";
 import {
-  ACCOUNT_TYPE_COLOR_SCHEME,
+  AccountType,
   IAccountTransaction,
   IAccountType,
 } from "@/interfaces/transaction";
@@ -11,7 +11,6 @@ import {
   Badge,
   Button,
   ButtonGroup,
-  Card,
   Center,
   HStack,
   Heading,
@@ -88,7 +87,7 @@ export const AccountPage = ({ txs, address }: IAccountPageProps) => {
                 {types.map((t, i) => (
                   <Badge
                     key={i}
-                    colorScheme={ACCOUNT_TYPE_COLOR_SCHEME[t]}
+                    colorScheme={AccountType[t].colorScheme}
                     variant="solid"
                   >
                     {t}
