@@ -42,6 +42,7 @@ import { TagsBadge } from "@/components/Badge/TagBadge";
 import _ from "lodash";
 import { IAccountProxy } from "@/interfaces/account";
 import { ChainIcon } from "@/components/Icon/ChainIcon";
+import { InfoTooltip } from "@/components/Tooltips/InfoTooltip";
 
 interface IAccountPageProps {
   address: Address | null;
@@ -216,7 +217,10 @@ const InnerAccountPage = ({
       />
       {!!proxy?.length && (
         <Stack spacing={0}>
-          <Heading size="md">Proxy</Heading>
+          <HStack>
+            <Heading size="md">Proxy</Heading>
+            <InfoTooltip msg="Proxy logic used by this contract" />
+          </HStack>
           <Box h={1} />
           {proxy.map((p) => (
             <HStack key={p.logic}>

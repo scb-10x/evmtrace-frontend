@@ -33,9 +33,10 @@ import { GetServerSideProps } from "next";
 import { getAllTags } from "@/services/tag";
 import { InfoTooltip } from "@/components/Tooltips/InfoTooltip";
 import { TagBadge } from "@/components/Badge/TagBadge";
+import { IAggregatedTag } from "@/interfaces/tag";
 
 interface IHomePageProps {
-  allTags: string[] | null;
+  allTags: IAggregatedTag[] | null;
 }
 
 export const getServerSideProps = (async () => {
@@ -132,13 +133,9 @@ export const HomePage = ({ allTags }: IHomePageProps) => {
           </HStack>
           <Wrap fontSize={["md", "lg"]}>
             {allTags?.map((t) => (
-              <TagBadge
-                key={t}
-                tag={t}
-                as={Link}
-                href={`/tag/${t}`}
-                cursor="pointer"
-              />
+              <Stack>
+                <TagBadge key={t.tag} tag={t.tag} cursor="pointer" isLink />
+              </Stack>
             ))}
           </Wrap>
         </Stack>

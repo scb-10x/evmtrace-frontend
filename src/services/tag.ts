@@ -1,8 +1,8 @@
-import { ITag } from "@/interfaces/tag";
+import { IAggregatedTag, ITag } from "@/interfaces/tag";
 import axios from "axios";
 import { Address } from "viem";
 
-export const getAllTags = async (): Promise<string[] | null> => {
+export const getAllTags = async (): Promise<IAggregatedTag[] | null> => {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/tag/all`;
   try {
     return await axios.get(url).then((res) => res.data?.data || null);

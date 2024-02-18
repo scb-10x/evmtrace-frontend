@@ -33,12 +33,13 @@ export const getServerSideProps = (async (
   context: GetServerSidePropsContext
 ) => {
   const { tag } = context.params as { tag: string };
+  const sanitizedTag = tag.replaceAll("-", " ");
   const { page: p } = context.query;
   const page = p ? parseInt(p as string) : 1;
-  const tags = await getTagAddresses(tag, page - 1);
+  const tags = await getTagAddresses(sanitizedTag, page - 1);
   return {
     props: {
-      tag,
+      tag: sanitizedTag,
       tags,
     },
   };
@@ -69,7 +70,7 @@ export const TagPage = ({ tag, tags }: ITagPageProps) => {
       }),
       columnHelper.accessor("tags", {
         header: "Tags",
-        cell: (row) => <TagsBadge tags={_.uniq(row.getValue())} />,
+        cell: (row) => <TagsBadge tags={_.uniq(row.getValue())} isLink />,
       }),
     ];
   }, []);

@@ -9,7 +9,7 @@ import { useEffect, useMemo } from "react";
 import uniqolor from "uniqolor";
 import tinycolor from "tinycolor2";
 import { create } from "zustand";
-import { motion } from "framer-motion";
+import Link from "next/link";
 
 const useHighlight = create<{
   highlight: string | null;
@@ -23,11 +23,13 @@ const useHighlight = create<{
 
 export const TagsBadge = ({
   tags,
+  isLink,
   fallback,
   badgeProps,
   ...props
 }: {
   tags?: string[];
+  isLink?: boolean;
   fallback?: JSX.Element;
   badgeProps?: BadgeProps;
 } & WrapProps) => {
@@ -35,7 +37,13 @@ export const TagsBadge = ({
   return (
     <Wrap {...props}>
       {tags.map((t, i) => (
-        <TagBadge tag={t} key={i} fontSize={props.fontSize} {...badgeProps} />
+        <TagBadge
+          tag={t}
+          key={i}
+          fontSize={props.fontSize}
+          {...badgeProps}
+          isLink={isLink}
+        />
       ))}
     </Wrap>
   );
@@ -45,10 +53,15 @@ type TagBadgeComponent = ChakraComponent<
   "div",
   {
     tag: string;
+    isLink?: boolean;
   }
 >;
 
-export const TagBadge = (({ tag, ...props }: { tag: string } & BadgeProps) => {
+export const TagBadge = (({
+  tag,
+  isLink,
+  ...props
+}: { tag: string; isLink?: boolean } & BadgeProps) => {
   const { highlight, setHighlight, clearHighlight } = useHighlight();
 
   const [c, bg, hoverBg, clickBg] = useMemo(() => {
@@ -69,36 +82,32 @@ export const TagBadge = (({ tag, ...props }: { tag: string } & BadgeProps) => {
   }, []);
 
   return (
-    <motion.div
-      initial={{ borderColor: "transparent" }}
-      animate={{
-        scale: highlight === tag ? 1.2 : 1,
-        borderColor:
-          highlight === tag ? tinycolor(c).brighten().toString() : "#00000000",
+    <Badge
+      color={c}
+      bg={bg}
+      fontSize="inherit"
+      _hover={{
+        bg: hoverBg,
       }}
-      style={{
-        border: "0.1em dashed",
-        borderRadius: "0.3em",
-        width: "fit-content",
+      _active={{
+        bg: clickBg,
       }}
+      transform={highlight === tag ? "scale(1.2)" : "scale(1)"}
+      transition="all 0.2s ease-in-out"
+      border="0.1em dashed"
+      borderColor={
+        highlight === tag ? tinycolor(c).brighten().toString() : "transparent"
+      }
+      borderRadius="0.25em"
+      width="fit-content"
+      cursor={isLink ? "pointer" : "default"}
+      onMouseEnter={() => setHighlight(tag)}
+      onMouseLeave={clearHighlight}
+      as={isLink ? Link : undefined}
+      href={isLink ? `/tags/${tag}` : undefined}
+      {...props}
     >
-      <Badge
-        color={c}
-        bg={bg}
-        fontSize="inherit"
-        _hover={{
-          bg: hoverBg,
-        }}
-        _active={{
-          bg: clickBg,
-        }}
-        cursor="default"
-        onMouseEnter={() => setHighlight(tag)}
-        onMouseLeave={clearHighlight}
-        {...props}
-      >
-        {tag}
-      </Badge>
-    </motion.div>
+      {tag}
+    </Badge>
   );
 }) as TagBadgeComponent;
