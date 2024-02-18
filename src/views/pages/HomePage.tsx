@@ -13,6 +13,7 @@ import {
   InputRightElement,
   IconButton,
   chakra,
+  HStack,
 } from "@chakra-ui/react";
 import { Section, AppHeader } from "@/components/common";
 import _ from "lodash";
@@ -28,14 +29,25 @@ import { LuArrowRight, LuSearch } from "react-icons/lu";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { MainLogo } from "@/components/common/MainLogo";
+import { GetServerSideProps } from "next";
+import { getAllTags } from "@/services/tag";
+import { InfoTooltip } from "@/components/Tooltips/InfoTooltip";
+import { TagBadge } from "@/components/Badge/TagBadge";
 
-export async function getServerSideProps() {
-  return {
-    props: {},
-  };
+interface IHomePageProps {
+  allTags: string[] | null;
 }
 
-export const HomePage = () => {
+export const getServerSideProps = (async () => {
+  const allTags = await getAllTags();
+  return {
+    props: {
+      allTags,
+    },
+  };
+}) satisfies GetServerSideProps<IHomePageProps>;
+
+export const HomePage = ({ allTags }: IHomePageProps) => {
   const { txs, blocks } = useLatest({
     initialBlocks: [],
     initialTxs: [],
@@ -112,6 +124,19 @@ export const HomePage = () => {
             </form>
           );
         })()}
+
+        <Stack>
+          <HStack>
+            <Heading size="md">Discover Tags</Heading>
+            <InfoTooltip msg="Discover related contracts by our tags" />
+          </HStack>
+          <Wrap fontSize={["md", "lg"]}>
+            {allTags?.map((t) => (
+              <TagBadge key={t} tag={t} as={Link} href={`/tag/${t}`} />
+            ))}
+          </Wrap>
+        </Stack>
+
         <SimpleGrid columns={[1, null, 2]} spacing={[4, null, 2]}>
           <Stack>
             <Heading size="md">Latest Blocks</Heading>
