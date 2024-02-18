@@ -5,7 +5,7 @@ import {
   Wrap,
   WrapProps,
 } from "@chakra-ui/react";
-import { useEffect, useMemo } from "react";
+import { ReactNode, useEffect, useMemo } from "react";
 import uniqolor from "uniqolor";
 import tinycolor from "tinycolor2";
 import { create } from "zustand";
@@ -60,8 +60,13 @@ type TagBadgeComponent = ChakraComponent<
 export const TagBadge = (({
   tag,
   isLink,
+  builder,
   ...props
-}: { tag: string; isLink?: boolean } & BadgeProps) => {
+}: {
+  tag: string;
+  isLink?: boolean;
+  builder?: (tag: string) => ReactNode;
+} & BadgeProps) => {
   const { highlight, setHighlight, clearHighlight } = useHighlight();
 
   const [c, bg, hoverBg, clickBg] = useMemo(() => {
@@ -104,10 +109,10 @@ export const TagBadge = (({
       onMouseEnter={() => setHighlight(tag)}
       onMouseLeave={clearHighlight}
       as={isLink ? Link : undefined}
-      href={isLink ? `/tags/${tag}` : undefined}
+      href={isLink ? `/tag/${tag}` : undefined}
       {...props}
     >
-      {tag}
+      {builder ? builder(tag) : tag}
     </Badge>
   );
 }) as TagBadgeComponent;

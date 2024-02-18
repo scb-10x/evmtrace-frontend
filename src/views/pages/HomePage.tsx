@@ -135,6 +135,7 @@ export const HomePage = ({ allTags }: IHomePageProps) => {
             {allTags?.map((t) => (
               <Stack>
                 <TagBadge key={t.tag} tag={t.tag} cursor="pointer" isLink />
+                <Text>{t.count}</Text>
               </Stack>
             ))}
           </Wrap>
