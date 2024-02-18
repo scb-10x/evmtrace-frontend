@@ -14,6 +14,7 @@ import {
   IconButton,
   chakra,
   HStack,
+  Badge,
 } from "@chakra-ui/react";
 import { Section, AppHeader } from "@/components/common";
 import _ from "lodash";
@@ -34,6 +35,7 @@ import { getAllTags } from "@/services/tag";
 import { InfoTooltip } from "@/components/Tooltips/InfoTooltip";
 import { TagBadge } from "@/components/Badge/TagBadge";
 import { IAggregatedTag } from "@/interfaces/tag";
+import numbro from "numbro";
 
 interface IHomePageProps {
   allTags: IAggregatedTag[] | null;
@@ -133,10 +135,10 @@ export const HomePage = ({ allTags }: IHomePageProps) => {
           </HStack>
           <Wrap fontSize={["md", "lg"]}>
             {allTags?.map((t) => (
-              <Stack>
+              <Badge py={1} px={1} fontSize={["sm", "md"]} key={t.tag}>
+                {numbro(t.count).format({ thousandSeparated: true })}{" "}
                 <TagBadge key={t.tag} tag={t.tag} cursor="pointer" isLink />
-                <Text>{t.count}</Text>
-              </Stack>
+              </Badge>
             ))}
           </Wrap>
         </Stack>
