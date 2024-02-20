@@ -2,6 +2,7 @@ import {
   Checkbox,
   Image,
   Table,
+  TableProps,
   Tbody,
   Td,
   Text,
@@ -16,6 +17,7 @@ export const ChainCheckboxTable = ({
   chains,
   selected,
   setSelected,
+  ...tableProps
 }: {
   selected: { key: string; color: string; label: string }[];
   setSelected: Dispatch<
@@ -28,9 +30,11 @@ export const ChainCheckboxTable = ({
     id: number;
     icon?: string;
   }[];
-}) => {
+} & TableProps) => {
   return (
     <Table
+      w="100%"
+      h="100%"
       size="sm"
       sx={{
         th: {
@@ -43,6 +47,7 @@ export const ChainCheckboxTable = ({
           pr: 1,
         },
       }}
+      {...tableProps}
     >
       <Thead>
         <Tr>

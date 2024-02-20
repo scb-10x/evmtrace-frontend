@@ -34,6 +34,7 @@ import {
   YAxis,
 } from "recharts";
 import tinycolor from "tinycolor2";
+import { ChainCheckboxTable } from "../HomePage/ChainCheckboxTable";
 
 interface IPivotedData {
   timestamp: number;
@@ -44,6 +45,23 @@ interface IPivotedData {
     allTransactionCount: number;
   };
 }
+
+const StatCard = ({ label, number }: { label: string; number: number }) => {
+  return (
+    <Card
+      as={Stack}
+      spacing={0}
+      p={2}
+      h="fit-content"
+      w={["full", "fit-content"]}
+    >
+      <Text>{label}</Text>
+      <Text fontSize="2xl" as="b">
+        {numbro(number).format({ thousandSeparated: true })}
+      </Text>
+    </Card>
+  );
+};
 
 export const TxCountChart = ({ stats }: { stats: ITxCountStats[] }) => {
   const data = useMemo(() => {
@@ -110,136 +128,42 @@ export const TxCountChart = ({ stats }: { stats: ITxCountStats[] }) => {
     },
   ]);
 
+  const txStats = useMemo(() => {
+    let all = 0;
+    let related = 0;
+    for (const stat of stats) {
+      if (moment(stat.timestamp * 1000).isSame(moment(), "day")) {
+        all += stat.totalTransactionCount;
+        related += stat.transactionCount;
+      }
+    }
+    return { all, related };
+  }, [stats]);
+
+  const Table = (
+    <ChainCheckboxTable
+      chains={[total, ...chains]}
+      selected={selected}
+      setSelected={setSelected}
+      w={[42, 32]}
+    />
+  );
+  const isMobile = useBreakpointValue([true, false]);
+
   return (
-    <>
-      <Stack direction={["column", "row"]} spacing={[2, 4]}>
-        <SimpleGrid columns={[1, 1]} spacingX={2}>
-          <Table
-            size="sm"
-            sx={{
-              th: {
-                position: "relative",
-                fontSize: "0.5rem",
-              },
-              "th, td": {
-                whiteSpace: "nowrap",
-                pl: 1,
-                pr: 1,
-              },
-            }}
-          >
-            <Thead>
-              <Tr>
-                <Th>
-                  <Text className="rt">All</Text>
-                </Th>
-                <Th>
-                  <Text className="rt">Related</Text>
-                </Th>
-                <Th>Chain</Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {[total, ...chains].map((c) => {
-                const color = c.color;
-                const lightColor =
-                  (c as any)?.lightColor ||
-                  tinycolor(color).saturate(20).lighten(20).toString();
-                const key = c.id ? `${c.id}.` : "";
-                return (
-                  <Tr key={c.id}>
-                    <Td>
-                      <Checkbox
-                        _checked={{
-                          "& .chakra-checkbox__control": {
-                            background: lightColor,
-                            "&:hover": {
-                              background: tinycolor(lightColor)
-                                .darken(5)
-                                .toString(),
-                            },
-                            borderColor: "transparent",
-                          },
-                        }}
-                        isChecked={
-                          !!selected.find(
-                            (e) => e.key === `${key}allTransactionCount`
-                          )
-                        }
-                        onChange={(changed) => {
-                          if (changed.target.checked) {
-                            setSelected((prev) => [
-                              ...prev,
-                              {
-                                key: `${key}allTransactionCount`,
-                                color: lightColor,
-                                label: c.name ? `${c.name} All Txs` : "All Txs",
-                              },
-                            ]);
-                          } else {
-                            setSelected((prev) =>
-                              prev.filter(
-                                (e) => e.key !== `${key}allTransactionCount`
-                              )
-                            );
-                          }
-                        }}
-                      />
-                    </Td>
-                    <Td>
-                      <Checkbox
-                        _checked={{
-                          "& .chakra-checkbox__control": {
-                            background: color,
-                            "&:hover": {
-                              background: tinycolor(color).darken(5).toString(),
-                            },
-                            borderColor: "transparent",
-                          },
-                        }}
-                        _hover={{
-                          background: "whiteAlpha.100",
-                        }}
-                        isChecked={
-                          !!selected.find(
-                            (e) => e.key === `${key}relatedTransactionCount`
-                          )
-                        }
-                        onChange={(changed) => {
-                          if (changed.target.checked) {
-                            setSelected((prev) => [
-                              ...prev,
-                              {
-                                key: `${key}relatedTransactionCount`,
-                                color,
-                                label: c.name
-                                  ? `${c.name} Related Txs`
-                                  : "Related Txs",
-                              },
-                            ]);
-                          } else {
-                            setSelected((prev) =>
-                              prev.filter(
-                                (e) => e.key !== `${key}relatedTransactionCount`
-                              )
-                            );
-                          }
-                        }}
-                      />
-                    </Td>
-                    <Td>
-                      {c.icon ? (
-                        <Image src={c.icon} boxSize={4} />
-                      ) : (
-                        <Text>All</Text>
-                      )}
-                    </Td>
-                  </Tr>
-                );
-              })}
-            </Tbody>
-          </Table>
-        </SimpleGrid>
+    <Stack spacing={0}>
+      <HStack>
+        <Wrap w="full">
+          <StatCard label="Total Transaction Today" number={txStats.all} />
+          <StatCard
+            label="Related Transaction Today"
+            number={txStats.related}
+          />
+        </Wrap>
+        {isMobile && Table}
+      </HStack>
+      <HStack>
+        {!isMobile && Table}
         <Stack w="100%">
           <Wrap fontSize={["sm", "md"]} spacingX={2} spacingY={0}>
             {selected.map((c) => (
@@ -306,7 +230,7 @@ export const TxCountChart = ({ stats }: { stats: ITxCountStats[] }) => {
             </ResponsiveContainer>
           </Box>
         </Stack>
-      </Stack>
-    </>
+      </HStack>
+    </Stack>
   );
 };

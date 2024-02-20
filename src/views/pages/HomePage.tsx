@@ -81,7 +81,7 @@ export const HomePage = ({ allTags, txCount }: IHomePageProps) => {
 
         <Stack spacing={4}>
           {txCount?.length && (
-            <Stack>
+            <Stack spacing={[0, 2]}>
               <HStack>
                 <Heading size="md">Transaction Count</Heading>
                 <InfoTooltip msg="Related transaction counts over 5 days period" />
