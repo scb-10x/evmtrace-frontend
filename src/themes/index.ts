@@ -1,4 +1,4 @@
-import { extendTheme } from "@chakra-ui/react";
+import { StyleFunctionProps, extendTheme } from "@chakra-ui/react";
 import { cardTheme } from "./Card";
 import { buttonTheme } from "./Button";
 import { tooltipTheme } from "./Tooltip";
@@ -144,9 +144,9 @@ const theme = extendTheme({
   breakpoints,
 
   styles: {
-    global: (_props: any) => ({
+    global: (props: StyleFunctionProps) => ({
       body: {
-        bg: "#05060E",
+        bg: props.colorMode === "dark" ? "#05060E" : "#f9f9fb",
         height: "100dvh",
         overflowX: "hidden",
         lineHeight: "base",

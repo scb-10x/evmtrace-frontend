@@ -8,6 +8,8 @@ import {
   Text,
   TextProps,
   chakra,
+  useColorMode,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { useEffect } from "react";
@@ -41,6 +43,7 @@ export const HexHighlightBadge = ({
   isAccount?: boolean;
 }) => {
   const { highlight, setHighlight, clearHighlight } = useHighlight();
+  const highlightColor = useColorModeValue("yellow.600", "yellow.300");
 
   const isHighlighted = children?.toString() === highlight;
   const isExpanded =
@@ -75,12 +78,12 @@ export const HexHighlightBadge = ({
           w="fit-content"
           overflowWrap={wrap ? "anywhere" : "inherit"}
           {...props}
-          color={isHighlighted ? "yellow.300" : props.color || "inherit"}
+          color={isHighlighted ? highlightColor : props.color || "inherit"}
           cursor={
             isHighlighted && isLink ? "pointer" : props.cursor || "default"
           }
           borderColor={
-            isHighlighted ? "yellow.300" : props.borderColor || "transparent"
+            isHighlighted ? highlightColor : props.borderColor || "transparent"
           }
           as={isLink ? Link : undefined}
           href={

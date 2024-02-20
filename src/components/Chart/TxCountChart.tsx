@@ -87,7 +87,6 @@ export const TxCountChart = ({ stats }: { stats: ITxCountStats[] }) => {
   }, [stats]);
 
   const ticks = useBreakpointValue([100, 40, 20]);
-  const yWidth = useBreakpointValue([30, 50]);
 
   const total = {
     id: 0,
@@ -113,14 +112,14 @@ export const TxCountChart = ({ stats }: { stats: ITxCountStats[] }) => {
 
   return (
     <>
-      <Stack direction={["column", "row"]}>
+      <Stack direction={["column", "row"]} spacing={[2, 4]}>
         <SimpleGrid columns={[1, 1]} spacingX={2}>
           <Table
             size="sm"
             sx={{
               th: {
                 position: "relative",
-                fontSize: "xs",
+                fontSize: "0.5rem",
               },
               "th, td": {
                 whiteSpace: "nowrap",
@@ -151,7 +150,17 @@ export const TxCountChart = ({ stats }: { stats: ITxCountStats[] }) => {
                   <Tr key={c.id}>
                     <Td>
                       <Checkbox
-                        colorScheme="primary"
+                        _checked={{
+                          "& .chakra-checkbox__control": {
+                            background: lightColor,
+                            "&:hover": {
+                              background: tinycolor(lightColor)
+                                .darken(5)
+                                .toString(),
+                            },
+                            borderColor: "transparent",
+                          },
+                        }}
                         isChecked={
                           !!selected.find(
                             (e) => e.key === `${key}allTransactionCount`
@@ -179,7 +188,18 @@ export const TxCountChart = ({ stats }: { stats: ITxCountStats[] }) => {
                     </Td>
                     <Td>
                       <Checkbox
-                        colorScheme="primary"
+                        _checked={{
+                          "& .chakra-checkbox__control": {
+                            background: color,
+                            "&:hover": {
+                              background: tinycolor(color).darken(5).toString(),
+                            },
+                            borderColor: "transparent",
+                          },
+                        }}
+                        _hover={{
+                          background: "whiteAlpha.100",
+                        }}
                         isChecked={
                           !!selected.find(
                             (e) => e.key === `${key}relatedTransactionCount`
@@ -237,7 +257,7 @@ export const TxCountChart = ({ stats }: { stats: ITxCountStats[] }) => {
               >
                 <YAxis
                   fontSize="12px"
-                  width={yWidth}
+                  width={30}
                   tickFormatter={(v) => numbro(v).format({ average: true })}
                 />
                 <XAxis
