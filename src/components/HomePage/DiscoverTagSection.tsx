@@ -28,20 +28,23 @@ export const DiscoverTagSection = ({ tags }: { tags: IChainTags[] }) => {
     chains.map((c) => c.id.toString())
   );
   const selectedTags = useMemo(() => {
-    const filterdTags = _.cloneDeep(
-      tags.filter((t) => selected.includes(t.chain_id.toString()))
+    const filteredTags = tags.filter((t) =>
+      selected.includes(t.chain_id.toString())
     );
-    return filterdTags.reduce((acc, t) => {
-      t.tags.forEach((tag) => {
-        const index = acc.findIndex((a) => a.tag === tag.tag);
-        if (index === -1) {
-          acc.push(tag);
-        } else {
-          acc[index].count += tag.count;
-        }
-      });
-      return acc;
-    }, [] as IAggregatedTag[]);
+    return _.sortBy(
+      filteredTags.reduce((acc, t) => {
+        t.tags.forEach((tag) => {
+          const index = acc.findIndex((a) => a.tag === tag.tag);
+          if (index === -1) {
+            acc.push({ ...tag });
+          } else {
+            acc[index].count += tag.count;
+          }
+        });
+        return acc;
+      }, [] as IAggregatedTag[]),
+      (t) => -t.count
+    );
   }, [selected, tags]);
 
   return (
