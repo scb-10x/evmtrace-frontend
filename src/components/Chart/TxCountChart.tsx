@@ -67,8 +67,9 @@ export const TxCountChart = ({ stats }: { stats: ITxCountStats[] }) => {
   const data = useMemo(() => {
     const pivotedData: IPivotedData[] = [];
     const reversedStats = stats.slice().reverse();
+    // skip first timestamp
     let latestTimestamp = 0;
-    for (const stat of reversedStats) {
+    for (const stat of reversedStats.slice(chains.length, -chains.length)) {
       const { timestamp, chainId, transactionCount, totalTransactionCount } =
         stat;
       // timestamp a chainId 1 transactionCount x1 totalTransactionCount y1
@@ -131,14 +132,14 @@ export const TxCountChart = ({ stats }: { stats: ITxCountStats[] }) => {
   const txStats = useMemo(() => {
     let all = 0;
     let related = 0;
-    for (const stat of stats) {
+    for (const stat of data) {
       if (moment(stat.timestamp * 1000).isSame(moment(), "day")) {
-        all += stat.totalTransactionCount;
-        related += stat.transactionCount;
+        all += stat.allTransactionCount;
+        related += stat.relatedTransactionCount;
       }
     }
     return { all, related };
-  }, [stats]);
+  }, [data]);
 
   const Table = (
     <ChainCheckboxTable
@@ -186,7 +187,7 @@ export const TxCountChart = ({ stats }: { stats: ITxCountStats[] }) => {
                 />
                 <XAxis
                   dataKey="timestamp"
-                  tickFormatter={(v) => moment(v * 1000).format("D/M, hh:mm")}
+                  tickFormatter={(v) => moment(v * 1000).format("D/M, HH:mm")}
                   interval={ticks}
                   fontSize="12px"
                   height={20}
@@ -197,7 +198,7 @@ export const TxCountChart = ({ stats }: { stats: ITxCountStats[] }) => {
                     const { payload, label } = e;
                     return (
                       <Stack spacing={0} p={1} as={Card}>
-                        <Text>{moment(label * 1000).format("D/M, hh:mm")}</Text>
+                        <Text>{moment(label * 1000).format("D/M, HH:mm")}</Text>
                         <SimpleGrid columns={2} spacingX={2}>
                           {payload?.map((p) => (
                             <HStack key={p.dataKey}>
