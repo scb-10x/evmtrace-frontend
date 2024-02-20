@@ -10,7 +10,6 @@ import {
   Link,
   useDisclosure,
   HStack,
-  useColorMode,
 } from "@chakra-ui/react";
 import { HamburgerIcon, CloseIcon, ChevronDownIcon } from "@chakra-ui/icons";
 import LinkNext from "next/link";
@@ -18,7 +17,6 @@ import { useRouter } from "next/router";
 import * as React from "react";
 import { Menu } from "@/interfaces/menu";
 import { Title } from "./Title";
-import { LuMoon, LuSun } from "react-icons/lu";
 import { SearchInput } from "../Input/SearchInput";
 
 const MENU: Menu[] = [
@@ -38,7 +36,7 @@ declare global {
 
 export const Navbar = () => {
   const { isOpen, onToggle } = useDisclosure();
-  const { colorMode, toggleColorMode } = useColorMode();
+  const router = useRouter();
 
   return (
     <>
@@ -73,7 +71,9 @@ export const Navbar = () => {
             <DesktopNav />
           </HStack>
 
-          <SearchInput display={["none", "flex"]} />
+          {router.pathname !== "/" && (
+            <SearchInput display={["none", "flex"]} />
+          )}
 
           {
             //<IconButton
