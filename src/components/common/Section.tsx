@@ -8,7 +8,7 @@ export const SectionContainer = (props: BoxProps) => {
       minH="100dvh"
       maxW="container.xl"
       mx="auto"
-      px={{ base: 10, md: 20 }}
+      px={[6, 10, 20]}
       {...props}
     />
   );

@@ -16,11 +16,11 @@ const metadata = {
 };
 
 export const chains = [
-  { ...mainnet, icon: "/icons/ethereum.svg" },
-  { ...arbitrum, icon: "/icons/arbitrum.svg" },
-  { ...optimism, icon: "/icons/optimism.svg" },
-  { ...base, icon: "/icons/base.svg" },
-  { ...scroll, icon: "/icons/scroll.svg" },
+  { ...mainnet, icon: "/icons/ethereum.svg", color: "#756e6c" },
+  { ...arbitrum, icon: "/icons/arbitrum.svg", color: "#9dcced" },
+  { ...optimism, icon: "/icons/optimism.svg", color: "#ff0420" },
+  { ...base, icon: "/icons/base.svg", color: "#2565eb" },
+  { ...scroll, icon: "/icons/scroll.svg", color: "#ffeeda" },
 ];
 
 export const getChain = (chainId?: number) => {
