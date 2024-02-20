@@ -19,6 +19,7 @@ import * as React from "react";
 import { Menu } from "@/interfaces/menu";
 import { Title } from "./Title";
 import { LuMoon, LuSun } from "react-icons/lu";
+import { SearchInput } from "../Input/SearchInput";
 
 const MENU: Menu[] = [
   {
@@ -72,6 +73,8 @@ export const Navbar = () => {
             <DesktopNav />
           </HStack>
 
+          <SearchInput display={["none", "flex"]} />
+
           {
             //<IconButton
             //size="sm"
@@ -88,6 +91,7 @@ export const Navbar = () => {
         </Flex>
 
         <Collapse in={isOpen} animateOpacity>
+          <SearchInput pb={2} display={["flex", "none"]} />
           <MobileNav />
         </Collapse>
       </Box>
