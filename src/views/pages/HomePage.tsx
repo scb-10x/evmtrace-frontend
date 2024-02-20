@@ -8,6 +8,7 @@ import {
   Image,
   chakra,
   HStack,
+  Divider,
 } from "@chakra-ui/react";
 import { Section, AppHeader } from "@/components/common";
 import _ from "lodash";
@@ -79,7 +80,7 @@ export const HomePage = ({ allTags, txCount }: IHomePageProps) => {
 
         <SearchInput hasDetails />
 
-        <Stack spacing={4}>
+        <Stack spacing={[4, null, 8]} divider={<Divider />}>
           {txCount?.length && (
             <Stack spacing={[0, 2]}>
               <HStack>
@@ -92,9 +93,19 @@ export const HomePage = ({ allTags, txCount }: IHomePageProps) => {
 
           <DiscoverTagSection tags={allTags || []} />
 
-          <SimpleGrid columns={[1, null, 2]} spacing={[4, null, 2]}>
+          <SimpleGrid columns={[1, null, 2]} spacing={[4, null, 8]}>
             <Stack>
-              <Heading size="md">Latest Blocks</Heading>
+              <HStack justify="space-between">
+                <Heading size="md">Latest Blocks</Heading>
+                <Button
+                  as={Link}
+                  href="/latest/blocks"
+                  variant="outline"
+                  size="sm"
+                >
+                  View All
+                </Button>
+              </HStack>
               <LatestStackCustomScroll>
                 <AnimatePresence>
                   {blocks.slice(0, 12).map((block, i) => (
@@ -102,12 +113,19 @@ export const HomePage = ({ allTags, txCount }: IHomePageProps) => {
                   ))}
                 </AnimatePresence>
               </LatestStackCustomScroll>
-              <Button as={Link} href="/latest/blocks">
-                View All Latest Blocks
-              </Button>
             </Stack>
             <Stack>
-              <Heading size="md">Latest Transactions</Heading>
+              <HStack justify="space-between">
+                <Heading size="md">Latest Transactions</Heading>
+                <Button
+                  as={Link}
+                  href="/latest/txs"
+                  variant="outline"
+                  size="sm"
+                >
+                  View All
+                </Button>
+              </HStack>
               <LatestStackCustomScroll>
                 <AnimatePresence>
                   {txs.slice(0, 10).map((tx, i) => (
@@ -119,9 +137,6 @@ export const HomePage = ({ allTags, txCount }: IHomePageProps) => {
                   ))}
                 </AnimatePresence>
               </LatestStackCustomScroll>
-              <Button as={Link} href="/latest/txs">
-                View All Latest Transactions
-              </Button>
             </Stack>
           </SimpleGrid>
         </Stack>

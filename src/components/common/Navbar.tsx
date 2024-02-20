@@ -24,6 +24,14 @@ const MENU: Menu[] = [
     label: "Home",
     href: "/",
   },
+  {
+    label: "Latest Blocks",
+    href: "/latest/blocks",
+  },
+  {
+    label: "Latest Txs",
+    href: "/latest/txs",
+  },
 ];
 
 declare global {
