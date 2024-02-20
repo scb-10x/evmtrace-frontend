@@ -24,6 +24,7 @@ import { PercentageBadge } from "@/components/Badge/PercentageBadge";
 import { SectionItem } from "@/components/BlockPage/SectionItem";
 import moment from "@/constants/moment";
 import { HexHighlightBadge } from "@/components/Badge/HexHighlightBadge";
+import { setCacheHeader } from "@/utils/header";
 
 interface IBlockPageProps {
   block: IBlock | null;
@@ -36,7 +37,7 @@ export const getServerSideProps = (async (
   context: GetServerSidePropsContext
 ) => {
   // 4 hours
-  context.res.setHeader("Cache-Control", "max-age=14400");
+  setCacheHeader(context.res, 14400);
 
   const { chainId: cid, number } = context.query;
   const chainId = Number(cid);

@@ -32,6 +32,7 @@ import { ITag } from "@/interfaces/tag";
 import { getTags } from "@/services/tag";
 import { TagsBadge } from "@/components/Badge/TagBadge";
 import _ from "lodash";
+import { setCacheHeader } from "@/utils/header";
 
 interface ITxPageProps {
   tx: IDetailedTransaction | null;
@@ -42,7 +43,7 @@ export const getServerSideProps = (async (
   context: GetServerSidePropsContext
 ) => {
   // 4 hours
-  context.res.setHeader("Cache-Control", "max-age=14400");
+  setCacheHeader(context.res, 14400);
 
   const { hash: h } = context.params as { hash: string };
   const hash = String(h);

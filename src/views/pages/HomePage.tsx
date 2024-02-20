@@ -30,6 +30,7 @@ import { ITxCountStats } from "@/interfaces/stats";
 import { TxCountChart } from "@/components/Chart/TxCountChart";
 import { SearchInput } from "@/components/Input/SearchInput";
 import { DiscoverTagSection } from "@/components/HomePage/DiscoverTagSection";
+import { setCacheHeader } from "@/utils/header";
 
 interface IHomePageProps {
   allTags: IChainTags[] | null;
@@ -40,7 +41,7 @@ export const getServerSideProps = (async (
   context: GetServerSidePropsContext
 ) => {
   // 4 hours
-  context.res.setHeader("Cache-Control", "max-age=14400");
+  setCacheHeader(context.res, 14400);
 
   const [allTags, txCount] = await Promise.all([
     getAllTagByChain(),

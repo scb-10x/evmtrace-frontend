@@ -23,6 +23,7 @@ import { LuChevronLeft, LuChevronRight } from "react-icons/lu";
 import { AnimatedTable } from "../layouts/AnimatedTable";
 import { TagBadge, TagsBadge } from "@/components/Badge/TagBadge";
 import _ from "lodash";
+import { setCacheHeader } from "@/utils/header";
 
 interface ITagPageProps {
   tag: string;
@@ -33,7 +34,7 @@ export const getServerSideProps = (async (
   context: GetServerSidePropsContext
 ) => {
   // 1 hours
-  context.res.setHeader("Cache-Control", "max-age=3600");
+  setCacheHeader(context.res, 3600);
 
   const { tag } = context.params as { tag: string };
   const sanitizedTag = tag.replaceAll("-", " ");

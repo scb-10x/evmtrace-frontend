@@ -43,6 +43,7 @@ import _ from "lodash";
 import { IAccountProxy } from "@/interfaces/account";
 import { ChainIcon } from "@/components/Icon/ChainIcon";
 import { InfoTooltip } from "@/components/Tooltips/InfoTooltip";
+import { setCacheHeader } from "@/utils/header";
 
 interface IAccountPageProps {
   address: Address | null;
@@ -55,7 +56,7 @@ export const getServerSideProps = (async (
   context: GetServerSidePropsContext
 ) => {
   // 10 seconds
-  context.res.setHeader("Cache-Control", "max-age=10");
+  setCacheHeader(context.res, 10);
 
   try {
     const { address: a } = context.params as { address: string };
