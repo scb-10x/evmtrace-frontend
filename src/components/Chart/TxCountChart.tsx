@@ -4,19 +4,11 @@ import theme from "@/themes";
 import {
   Box,
   Card,
-  Checkbox,
   Circle,
   HStack,
-  Image,
   SimpleGrid,
   Stack,
-  Table,
-  Tbody,
-  Td,
   Text,
-  Th,
-  Thead,
-  Tr,
   Wrap,
   useBreakpointValue,
 } from "@chakra-ui/react";
@@ -33,7 +25,6 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import tinycolor from "tinycolor2";
 import { ChainCheckboxTable } from "../HomePage/ChainCheckboxTable";
 
 interface IPivotedData {
@@ -132,14 +123,15 @@ export const TxCountChart = ({ stats }: { stats: ITxCountStats[] }) => {
   const txStats = useMemo(() => {
     let all = 0;
     let related = 0;
-    for (const stat of data) {
-      if (moment(stat.timestamp * 1000).isSame(moment(), "day")) {
-        all += stat.allTransactionCount;
-        related += stat.relatedTransactionCount;
+    const latestDay = moment(stats[0].timestamp * 1000);
+    for (const stat of stats) {
+      if (moment(stat.timestamp * 1000).isSame(latestDay, "day")) {
+        all += stat.totalTransactionCount;
+        related += stat.transactionCount;
       }
     }
     return { all, related };
-  }, [data]);
+  }, [stats]);
 
   const Table = (
     <ChainCheckboxTable
@@ -152,7 +144,7 @@ export const TxCountChart = ({ stats }: { stats: ITxCountStats[] }) => {
   const isMobile = useBreakpointValue([true, false]);
 
   return (
-    <Stack spacing={0}>
+    <Stack spacing={2}>
       <HStack>
         <Wrap w="full">
           <StatCard label="Total Transaction Today" number={txStats.all} />
